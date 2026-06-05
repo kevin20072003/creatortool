@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run db:push && next build",
+    "prestart": "npm run db:push && node prisma/seed-if-empty.js",
     "start": "next start",
     "lint": "eslint",
     "db:push": "prisma db execute --file prisma/migrations/20260605150000_init/migration.sql --schema prisma/schema.prisma && prisma generate && node prisma/migrate.js",
