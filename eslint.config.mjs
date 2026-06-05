@@ -14,6 +14,7 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     "prisma/seed.js",
     "prisma/seed-if-empty.js",
+    "prisma/init-db.js",
     "prisma/migrate.js",
     "prisma/migrations/**",
   ]),
