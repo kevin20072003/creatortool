@@ -1,0 +1,171 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  email        String   @unique
+  name         String?
+  passwordHash String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Category {
+  id             Int        @id @default(autoincrement())
+  name           String
+  slug           String     @unique
+  description    String?
+  icon           String?
+  seoTitle       String?
+  seoDescription String?
+  sortOrder      Int        @default(0)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  tools          Tool[]
+  posts          BlogPost[]
+}
+
+model Tool {
+  id                           Int            @id @default(autoincrement())
+  name                         String
+  slug                         String         @unique
+  description                  String
+  content                      String         @default("")
+  templateType                 String         @default("content-only")
+  status                       String         @default("draft")
+  featured                     Boolean        @default(false)
+  popular                      Boolean        @default(false)
+  iconName                     String?
+  customAds                    Boolean        @default(false)
+  scanType                     String?
+  frameRate                    Float?
+  fieldRate                    Float?
+  videoFormatPreset            String?
+  interlaceWarnings            Boolean        @default(true)
+  onlineDeliveryRecommendation Boolean        @default(true)
+  featuredImage                String?
+  seoTitle                     String?
+  seoDescription               String?
+  keywords                     String?
+  sortOrder                    Int            @default(0)
+  categoryId                   Int?
+  category                     Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  faqs                         FAQ[]
+  relatedFrom                  ToolRelation[] @relation("RelatedFrom")
+  relatedTo                    ToolRelation[] @relation("RelatedTo")
+  createdAt                    DateTime       @default(now())
+  updatedAt                    DateTime       @updatedAt
+}
+
+model ToolRelation {
+  id            Int  @id @default(autoincrement())
+  sourceToolId  Int
+  relatedToolId Int
+  sourceTool    Tool @relation("RelatedFrom", fields: [sourceToolId], references: [id], onDelete: Cascade)
+  relatedTool   Tool @relation("RelatedTo", fields: [relatedToolId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceToolId, relatedToolId])
+}
+
+model BlogPost {
+  id             Int       @id @default(autoincrement())
+  title          String
+  slug           String    @unique
+  excerpt        String
+  content        String
+  featuredImage  String?
+  status         String    @default("draft")
+  seoTitle       String?
+  seoDescription String?
+  tags           String?
+  categoryId     Int?
+  category       Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  publishedAt    DateTime?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Page {
+  id             Int      @id @default(autoincrement())
+  title          String
+  slug           String   @unique
+  content        String
+  seoTitle       String?
+  seoDescription String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model FAQ {
+  id        Int      @id @default(autoincrement())
+  question  String
+  answer    String
+  sortOrder Int      @default(0)
+  toolId    Int?
+  tool      Tool?    @relation(fields: [toolId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model AdSlot {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  code      String   @default("")
+  enabled   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model SiteSetting {
+  id        Int      @id @default(autoincrement())
+  key       String   @unique
+  value     String   @default("")
+  group     String   @default("general")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Media {
+  id        Int      @id @default(autoincrement())
+  filename  String
+  url       String
+  mimeType  String?
+  size      Int      @default(0)
+  alt       String?
+  createdAt DateTime @default(now())
+}
+
+model AnalyticsEvent {
+  id         Int      @id @default(autoincrement())
+  type       String
+  path       String
+  entitySlug String?
+  device     String?
+  referrer   String?
+  metadata   String?
+  createdAt  DateTime @default(now())
+}
+
+model SearchLog {
+  id        Int      @id @default(autoincrement())
+  query     String
+  results   Int      @default(0)
+  device    String?
+  createdAt DateTime @default(now())
+}
+
+model AdminLog {
+  id        Int      @id @default(autoincrement())
+  action    String
+  entity    String
+  entityId  Int?
+  message   String?
+  createdAt DateTime @default(now())
+}
