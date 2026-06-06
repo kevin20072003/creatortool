@@ -30,14 +30,16 @@ Admin login after seed:
 Create `.env` on Hostinger from `.env.example`:
 
 ```env
-DATABASE_URL="file:./dev.db"
-NEXTAUTH_SECRET="use-a-long-random-secret"
-ADMIN_EMAIL="admin@example.com"
-ADMIN_PASSWORD="change-this-password"
-NEXT_PUBLIC_SITE_URL="https://creatortools.in"
+DATABASE_URL=file:./dev.db
+NEXTAUTH_SECRET=use-a-long-random-secret
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=change-this-password
+NEXT_PUBLIC_SITE_URL=https://creatortools.in
 ```
 
 Change `NEXTAUTH_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` before first seed.
+
+In Hostinger environment variable fields, enter values without quotes.
 
 ## Hostinger Business Plan Deployment
 
@@ -45,28 +47,69 @@ Change `NEXTAUTH_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` before first seed.
 2. In Hostinger, create a Node.js app pointing to this folder.
 3. Set the Node.js version to a modern supported version, ideally Node 20+.
 4. Add the environment variables from `.env.example`.
-5. Run:
+5. Use these deployment settings:
 
-```bash
-npm install
-npm run db:push
-npm run db:seed
-npm run build
+```txt
+Framework preset: Next.js
+Branch: main
+Root directory: ./
+Build command: npm run build
+Package manager: npm
+Output directory: .next
+Start command: npm start
 ```
 
-6. Set the start command:
+6. Redeploy from GitHub.
+
+The production `npm start` command automatically runs:
 
 ```bash
-npm start
+node prisma/init-db.js
+node prisma/migrate.js
+node prisma/seed-if-empty.js
+next start
 ```
+
+That creates SQLite tables, applies additive schema updates, and seeds the first admin/tools only if the database is empty.
 
 7. Open `/admin`, log in, then immediately use `/admin/change-password`.
 
 ## SQLite Notes
 
-The SQLite database is stored at `prisma/dev.db` when using `DATABASE_URL="file:./dev.db"`. Keep this file backed up. On Hostinger, do not delete it during updates.
+The SQLite database is stored at `prisma/dev.db` when using `DATABASE_URL=file:./dev.db`. Keep this file backed up. On Hostinger, do not delete it during updates.
 
 For a first deployment, `npm run db:push` creates the SQLite schema. `npm run db:seed` creates the first admin user, categories, tools, posts, pages, ad slots, and site settings.
+
+## Hostinger Troubleshooting
+
+If the page shows `503 Service Unavailable`, check Runtime Logs.
+
+If logs say:
+
+```txt
+The table main.Category does not exist
+The table main.Tool does not exist
+The table main.SiteSetting does not exist
+```
+
+then the SQLite schema did not initialize. Redeploy the latest commit and confirm the runtime logs show:
+
+```txt
+SQLite schema initialized.
+SQLite database is empty. Running seed...
+```
+
+or:
+
+```txt
+SQLite database already has seed data. Skipping seed.
+```
+
+If these lines do not appear, confirm the Hostinger start command is exactly:
+
+```bash
+npm start
+```
 
 ## Admin Features
 
