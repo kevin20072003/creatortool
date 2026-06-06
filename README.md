@@ -1,5 +1,15 @@
 # CreatorTools.in
 
+## Hostinger PHP/MySQL Version
+
+If the Next.js Node.js deployment is giving server errors on Hostinger, use the simpler PHP/MySQL version in:
+
+```text
+php-mysql-version/
+```
+
+Deploy it as **Custom PHP/HTML website** in Hostinger, not Node.js Web App. Full steps are in `php-mysql-version/README.md`.
+
 Production-ready Next.js creator tools website for Hostinger Business Hosting.
 
 ## Stack
