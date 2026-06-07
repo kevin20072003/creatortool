@@ -5,13 +5,14 @@ $tool = q('SELECT t.*, c.name category, c.slug category_slug FROM tools t LEFT J
 if (!$tool) {
     http_response_code(404);
     render_header('Not found');
-    echo '<main class="container section"><h1>Tool not found</h1><p><a class="btn-secondary" href="/tools.php">View all tools</a></p></main>';
+    echo '<main class="container section"><h1>Tool not found</h1><p><a class="btn-secondary" href="/tools">View all tools</a></p></main>';
     render_footer();
     exit;
 }
-track_event('page_view', '/tool.php?slug=' . $slug, $slug);
+track_event('page_view', tool_url($slug), $slug);
 $relatedTools = q('SELECT t.*, c.name category FROM tools t LEFT JOIN categories c ON c.id = t.category_id WHERE t.status = "published" AND t.id != ? AND (t.category_id = ? OR t.popular = 1) ORDER BY (t.category_id = ?) DESC, t.popular DESC, t.sort_order ASC LIMIT 6', [$tool['id'], $tool['category_id'], $tool['category_id']])->fetchAll();
 $relatedPosts = q('SELECT * FROM blog_posts WHERE status = "published" ORDER BY created_at DESC, id DESC LIMIT 3')->fetchAll();
+$toolFaqs = q('SELECT * FROM faqs WHERE tool_id = ? ORDER BY sort_order', [$tool['id']])->fetchAll();
 render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $tool['description']);
 ?>
 <main class="container section">
@@ -23,11 +24,24 @@ render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $
       'applicationCategory' => 'CreatorTool',
       'operatingSystem' => 'Web',
       'description' => $tool['description'],
-      'url' => rtrim(SITE_URL, '/') . '/tool.php?slug=' . $tool['slug'],
+      'url' => rtrim(SITE_URL, '/') . tool_url($tool['slug']),
       'offers' => ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'USD'],
   ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
   </script>
-  <p class="muted"><a href="/">Home</a> / <a href="/tools.php">Tools</a> / <a href="/category.php?slug=<?= e($tool['category_slug']) ?>"><?= e($tool['category']) ?></a></p>
+  <?php if ($toolFaqs): ?>
+  <script type="application/ld+json">
+  <?= json_encode([
+      '@context' => 'https://schema.org',
+      '@type' => 'FAQPage',
+      'mainEntity' => array_map(fn($faq) => [
+          '@type' => 'Question',
+          'name' => $faq['question'],
+          'acceptedAnswer' => ['@type' => 'Answer', 'text' => $faq['answer']],
+      ], $toolFaqs),
+  ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+  </script>
+  <?php endif; ?>
+  <p class="muted"><a href="/">Home</a> / <a href="/tools">Tools</a> / <a href="<?= e(category_url($tool['category_slug'])) ?>"><?= e($tool['category']) ?></a></p>
   <h1><?= e($tool['name']) ?></h1>
   <p class="lead"><?= e($tool['description']) ?></p>
   <?php ad_slot('header'); ?>
@@ -62,12 +76,17 @@ render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $
   </section>
   <?php ad_slot('in-content'); ?>
   <article class="card prose"><?= markdown($tool['content']) ?></article>
-  <section class="card"><h2>FAQ</h2><?php foreach (q('SELECT * FROM faqs WHERE tool_id = ? ORDER BY sort_order', [$tool['id']])->fetchAll() as $faq): ?><details><summary><?= e($faq['question']) ?></summary><p class="muted"><?= e($faq['answer']) ?></p></details><?php endforeach; ?></section>
+  <section class="grid-auto">
+    <div class="card"><h2>Example workflow</h2><p class="muted">Use <?= e($tool['name']) ?> before recording, exporting, uploading, or publishing. Start with a realistic value, press calculate or generate, then copy the result into your production notes, upload checklist, or client estimate.</p></div>
+    <div class="card"><h2>Common use cases</h2><p class="muted">Creators use this tool for YouTube planning, short-form content, live production, editing handoff, thumbnail/caption preparation, storage estimates, and repeatable publishing workflows.</p></div>
+    <div class="card"><h2>Pro tip</h2><p class="muted">Treat every result as a planning estimate. Camera settings, platform compression, scene complexity, export presets, and network conditions can change the final result.</p></div>
+  </section>
+  <section class="card"><h2>FAQ</h2><?php foreach ($toolFaqs as $faq): ?><details><summary><?= e($faq['question']) ?></summary><p class="muted"><?= e($faq['answer']) ?></p></details><?php endforeach; ?></section>
   <section class="section">
     <div class="section-head"><div><p class="eyebrow">Next steps</p><h2>Related tools</h2></div></div>
     <div class="grid-auto">
       <?php foreach ($relatedTools as $item): ?>
-        <a class="card tool-card compact" href="/tool.php?slug=<?= e($item['slug']) ?>">
+        <a class="card tool-card compact" href="<?= e(tool_url($item['slug'])) ?>">
           <span class="icon"><?= e($item['icon_name'] ?: substr($item['name'], 0, 2)) ?></span>
           <p class="eyebrow"><?= e($item['category']) ?></p>
           <h3><?= e($item['name']) ?></h3>
@@ -78,10 +97,10 @@ render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $
   </section>
   <?php ad_slot('footer'); ?>
   <section class="section">
-    <div class="section-head"><div><p class="eyebrow">Learn more</p><h2>Related guides</h2></div><a class="text-link" href="/blog.php">View blog</a></div>
+    <div class="section-head"><div><p class="eyebrow">Learn more</p><h2>Related guides</h2></div><a class="text-link" href="/blog">View blog</a></div>
     <div class="grid-auto">
       <?php foreach ($relatedPosts as $post): ?>
-        <a class="card article-card" href="/blog-post.php?slug=<?= e($post['slug']) ?>">
+        <a class="card article-card" href="<?= e(blog_url($post['slug'])) ?>">
           <p class="eyebrow">Creator guide</p>
           <h3><?= e($post['title']) ?></h3>
           <p class="muted"><?= e($post['excerpt']) ?></p>

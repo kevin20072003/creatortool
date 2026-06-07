@@ -68,7 +68,7 @@ $tools = q('SELECT t.*, c.name category FROM tools t LEFT JOIN categories c ON c
   <section class="card section">
     <h2>Tools</h2>
     <table class="table"><tr><th>Name</th><th>Category</th><th>Status</th><th>Actions</th></tr>
-      <?php foreach ($tools as $tool): ?><tr><td><?= e($tool['name']) ?></td><td><?= e($tool['category']) ?></td><td><?= e($tool['status']) ?></td><td><a href="/tool.php?slug=<?= e($tool['slug']) ?>">Preview</a> | <a href="?edit=<?= e((string)$tool['id']) ?>">Edit</a> | <a href="?delete=<?= e((string)$tool['id']) ?>" onclick="return confirm('Delete this tool?')">Delete</a></td></tr><?php endforeach; ?>
+      <?php foreach ($tools as $tool): ?><tr><td><?= e($tool['name']) ?></td><td><?= e($tool['category']) ?></td><td><?= e($tool['status']) ?></td><td><a href="<?= e(tool_url($tool['slug'])) ?>">Preview</a> | <a href="?edit=<?= e((string)$tool['id']) ?>">Edit</a> | <a href="?delete=<?= e((string)$tool['id']) ?>" onclick="return confirm('Delete this tool?')">Delete</a></td></tr><?php endforeach; ?>
     </table>
   </section>
 </main>

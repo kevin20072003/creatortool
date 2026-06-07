@@ -28,14 +28,14 @@ render_header('All Tools', 'Browse free creator calculators and generators for Y
   <div class="tool-list-layout">
     <aside class="card desktop-only">
       <p class="eyebrow">Categories</p>
-      <?php foreach ($categories as $cat): ?><a class="filter-link" href="/tools.php?category=<?= e($cat['slug']) ?>"><?= e($cat['name']) ?></a><?php endforeach; ?>
+      <?php foreach ($categories as $cat): ?><a class="filter-link" href="/tools?category=<?= e($cat['slug']) ?>"><?= e($cat['name']) ?></a><?php endforeach; ?>
       <?php ad_slot('sidebar'); ?>
     </aside>
     <section>
       <div class="result-count"><?= e((string)count($tools)) ?> tools found</div>
       <div class="grid-auto">
         <?php foreach ($tools as $index => $tool): ?>
-          <a class="card tool-card" href="/tool.php?slug=<?= e($tool['slug']) ?>">
+          <a class="card tool-card" href="<?= e(tool_url($tool['slug'])) ?>">
             <span class="icon"><?= e($tool['icon_name'] ?: substr($tool['name'], 0, 2)) ?></span>
             <p class="eyebrow"><?= e($tool['category']) ?></p>
             <h3><?= e($tool['name']) ?></h3>

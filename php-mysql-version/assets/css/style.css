@@ -108,6 +108,11 @@ summary{cursor:pointer;font-weight:950}
 .upload-preview.small{width:72px;height:72px}
 .upload-preview img{width:100%;height:100%;object-fit:cover}
 .check-row{display:flex;align-items:center;gap:9px;color:var(--muted);font-weight:850}
+.toggle-card,.ad-admin-card{border:1px solid var(--border);border-radius:8px;background:var(--surface-2);padding:14px;display:flex;gap:12px;align-items:flex-start}
+.toggle-card input,.check-row input{width:18px;height:18px;accent-color:var(--primary)}
+.toggle-card strong{display:block;color:var(--fg)}
+.toggle-card small{display:block;color:var(--muted);line-height:1.5;margin-top:4px}
+.ad-admin-card{display:grid}
 .alert{padding:14px;border-radius:8px;background:#fee2e2;color:#991b1b;font-weight:850;white-space:pre-wrap}
 @media(max-width:900px){
   .hero-grid,.tool-grid,.tool-list-layout,.footer-grid,.trust-card,.faq-grid,.analytics-grid{grid-template-columns:1fr}

@@ -35,6 +35,6 @@ $posts = q('SELECT * FROM blog_posts ORDER BY created_at DESC, id DESC')->fetchA
     <label class="label">Content<textarea class="textarea" name="content"><?= e($edit['content'] ?? '') ?></textarea></label>
     <p><button class="btn-primary" type="submit">Save post</button> <a class="btn-secondary" href="/admin/blog.php">Clear</a></p>
   </form>
-  <section class="card section"><h2>Posts</h2><table class="table"><tr><th>Title</th><th>Status</th><th>Actions</th></tr><?php foreach ($posts as $post): ?><tr><td><?= e($post['title']) ?></td><td><?= e($post['status']) ?></td><td><a href="/blog-post.php?slug=<?= e($post['slug']) ?>">Preview</a> | <a href="?edit=<?= e((string)$post['id']) ?>">Edit</a> | <a href="?delete=<?= e((string)$post['id']) ?>" onclick="return confirm('Delete post?')">Delete</a></td></tr><?php endforeach; ?></table></section>
+  <section class="card section"><h2>Posts</h2><table class="table"><tr><th>Title</th><th>Status</th><th>Actions</th></tr><?php foreach ($posts as $post): ?><tr><td><?= e($post['title']) ?></td><td><?= e($post['status']) ?></td><td><a href="<?= e(blog_url($post['slug'])) ?>">Preview</a> | <a href="?edit=<?= e((string)$post['id']) ?>">Edit</a> | <a href="?delete=<?= e((string)$post['id']) ?>" onclick="return confirm('Delete post?')">Delete</a></td></tr><?php endforeach; ?></table></section>
 </main>
 <?php admin_footer(); ?>

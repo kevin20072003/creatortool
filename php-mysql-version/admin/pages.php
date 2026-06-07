@@ -22,7 +22,7 @@ $pages = q('SELECT * FROM pages ORDER BY title')->fetchAll();
         <label class="label">SEO title<input class="input" name="seo_title" value="<?= e($edit['seo_title']) ?>"></label>
         <label class="label">SEO description<input class="input" name="seo_description" value="<?= e($edit['seo_description']) ?>"></label>
         <label class="label">Content<textarea class="textarea" name="content"><?= e($edit['content']) ?></textarea></label>
-        <p><button class="btn-primary" type="submit">Save page</button> <a class="btn-secondary" href="/page.php?slug=<?= e($edit['slug']) ?>">Preview</a></p>
+        <p><button class="btn-primary" type="submit">Save page</button> <a class="btn-secondary" href="<?= e(page_url($edit['slug'])) ?>">Preview</a></p>
       </form>
     <?php endif; ?>
   </div>

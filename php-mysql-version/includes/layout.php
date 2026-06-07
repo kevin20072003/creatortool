@@ -32,10 +32,10 @@ function render_header(string $title = '', string $description = ''): void {
       <a class="brand" href="/"><?php if ($logo): ?><img src="<?= e($logo) ?>" alt="<?= e($siteName) ?>"><?php else: ?><span>CT</span><?php endif; ?><?= e($siteName) ?></a>
       <button class="menu-btn" type="button" data-menu>Menu</button>
       <nav class="nav-links" data-nav>
-        <a href="/tools.php">Tools</a>
-        <a href="/blog.php">Blog</a>
-        <a href="/page.php?slug=about">About</a>
-        <a href="/page.php?slug=contact">Contact</a>
+        <a href="/tools">Tools</a>
+        <a href="/blog">Blog</a>
+        <a href="/pages/about">About</a>
+        <a href="/pages/contact">Contact</a>
       </nav>
     </div>
   </header>
@@ -59,8 +59,8 @@ function render_footer(): void {
           <?php if (setting('x_url')): ?><a href="<?= e(setting('x_url')) ?>">X</a><?php endif; ?>
         </p>
       </div>
-      <div><h3>Tools</h3><a href="/tools.php">All Tools</a><a href="/category.php?slug=youtube-tools">YouTube Tools</a><a href="/category.php?slug=video-calculators">Video Calculators</a></div>
-      <div><h3>Pages</h3><a href="/blog.php">Blog</a><a href="/page.php?slug=privacy-policy">Privacy</a><a href="/page.php?slug=terms-and-conditions">Terms</a></div>
+      <div><h3>Tools</h3><a href="/tools">All Tools</a><a href="/categories/youtube-tools">YouTube Tools</a><a href="/categories/video-calculators">Video Calculators</a></div>
+      <div><h3>Pages</h3><a href="/blog">Blog</a><a href="/pages/privacy-policy">Privacy</a><a href="/pages/terms-and-conditions">Terms</a></div>
       <div><h3>Admin</h3><a href="/admin/login.php">Login</a><a href="/sitemap.php">Sitemap</a></div>
     </div>
   </footer>
@@ -69,10 +69,11 @@ function render_footer(): void {
 <?php }
 
 function ad_slot(string $name): void {
+    if (setting('ads_enabled', '0') !== '1') return;
     $slot = q('SELECT code FROM ad_slots WHERE name = ? AND enabled = 1', [$name])->fetch();
     if ($slot && trim($slot['code'])) {
         echo $slot['code'];
-    } else {
+    } elseif (setting('show_ad_placeholders', '0') === '1') {
         echo '<div class="ad-slot">Ad placeholder - ' . e($name) . '</div>';
     }
 }

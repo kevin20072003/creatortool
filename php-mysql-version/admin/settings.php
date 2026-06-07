@@ -23,6 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach ($_POST['settings'] ?? [] as $name => $value) {
         q('INSERT INTO settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$name, trim($value)]);
     }
+    foreach (['ads_enabled', 'show_ad_placeholders'] as $toggle) {
+        $value = isset($_POST['settings'][$toggle]) ? '1' : '0';
+        q('INSERT INTO settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$toggle, $value]);
+    }
     if (!empty($_POST['remove_logo'])) {
         q('INSERT INTO settings (name, value) VALUES ("site_logo", "") ON DUPLICATE KEY UPDATE value = VALUES(value)');
     }
@@ -33,8 +37,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($logo) q('INSERT INTO settings (name, value) VALUES ("site_logo", ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$logo]);
     $favicon = upload_admin_image('site_favicon_file');
     if ($favicon) q('INSERT INTO settings (name, value) VALUES ("site_favicon", ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$favicon]);
+    $slotEnabled = $_POST['ad_enabled'] ?? [];
     foreach ($_POST['ads'] ?? [] as $name => $code) {
-        q('INSERT INTO ad_slots (name, code, enabled) VALUES (?, ?, 1) ON DUPLICATE KEY UPDATE code = VALUES(code)', [$name, trim($code)]);
+        q('INSERT INTO ad_slots (name, code, enabled) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE code = VALUES(code), enabled = VALUES(enabled)', [$name, trim($code), isset($slotEnabled[$name]) ? 1 : 0]);
     }
     $message = 'Settings saved.';
 }
@@ -74,8 +79,15 @@ $currentFavicon = setting('site_favicon');
 
     <h2>Adsense slots</h2>
     <div class="grid-auto">
+      <label class="toggle-card"><input type="checkbox" name="settings[ads_enabled]" value="1" <?= setting('ads_enabled', '0') === '1' ? 'checked' : '' ?>><span><strong>Ads on/off</strong><small>Turn off to hide every ad slot on public pages.</small></span></label>
+      <label class="toggle-card"><input type="checkbox" name="settings[show_ad_placeholders]" value="1" <?= setting('show_ad_placeholders', '0') === '1' ? 'checked' : '' ?>><span><strong>Show empty placeholders</strong><small>Keep off for a cleaner public site before Adsense approval.</small></span></label>
+    </div>
+    <div class="grid-auto">
       <?php foreach ($ads as $row): ?>
-        <label class="label wide"><?= e($row['name']) ?> ad code<textarea class="textarea" name="ads[<?= e($row['name']) ?>]"><?= e($row['code']) ?></textarea></label>
+        <div class="ad-admin-card wide">
+          <label class="check-row"><input type="checkbox" name="ad_enabled[<?= e($row['name']) ?>]" <?= !empty($row['enabled']) ? 'checked' : '' ?>> Enable <?= e($row['name']) ?> ad slot</label>
+          <label class="label"><?= e($row['name']) ?> ad code<textarea class="textarea" name="ads[<?= e($row['name']) ?>]"><?= e($row['code']) ?></textarea></label>
+        </div>
       <?php endforeach; ?>
     </div>
 

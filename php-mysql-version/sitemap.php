@@ -9,10 +9,10 @@ render_header('Sitemap', 'All pages, tools, categories, and blog posts on Creato
 <main class="container section">
   <h1>Sitemap</h1>
   <div class="grid-auto">
-    <section class="card"><h2>Tools</h2><?php foreach ($tools as $row): ?><a href="/tool.php?slug=<?= e($row['slug']) ?>"><?= e($row['name']) ?></a><?php endforeach; ?></section>
-    <section class="card"><h2>Categories</h2><?php foreach ($categories as $row): ?><a href="/category.php?slug=<?= e($row['slug']) ?>"><?= e($row['name']) ?></a><?php endforeach; ?></section>
-    <section class="card"><h2>Blog</h2><?php foreach ($posts as $row): ?><a href="/blog-post.php?slug=<?= e($row['slug']) ?>"><?= e($row['title']) ?></a><?php endforeach; ?></section>
-    <section class="card"><h2>Pages</h2><?php foreach ($pages as $row): ?><a href="/page.php?slug=<?= e($row['slug']) ?>"><?= e($row['title']) ?></a><?php endforeach; ?></section>
+    <section class="card"><h2>Tools</h2><?php foreach ($tools as $row): ?><a href="<?= e(tool_url($row['slug'])) ?>"><?= e($row['name']) ?></a><?php endforeach; ?></section>
+    <section class="card"><h2>Categories</h2><?php foreach ($categories as $row): ?><a href="<?= e(category_url($row['slug'])) ?>"><?= e($row['name']) ?></a><?php endforeach; ?></section>
+    <section class="card"><h2>Blog</h2><?php foreach ($posts as $row): ?><a href="<?= e(blog_url($row['slug'])) ?>"><?= e($row['title']) ?></a><?php endforeach; ?></section>
+    <section class="card"><h2>Pages</h2><?php foreach ($pages as $row): ?><a href="<?= e(page_url($row['slug'])) ?>"><?= e($row['title']) ?></a><?php endforeach; ?></section>
   </div>
 </main>
 <?php render_footer(); ?>

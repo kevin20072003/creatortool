@@ -4,4 +4,10 @@ DirectoryIndex index.php index.html
 <IfModule mod_rewrite.c>
 RewriteEngine On
 RewriteRule ^sitemap\.xml$ sitemap-xml.php [L]
+RewriteRule ^tools/?$ tools.php [L,QSA]
+RewriteRule ^tools/([a-z0-9-]+)/?$ tool.php?slug=$1 [L,QSA]
+RewriteRule ^categories/([a-z0-9-]+)/?$ category.php?slug=$1 [L,QSA]
+RewriteRule ^blog/?$ blog.php [L,QSA]
+RewriteRule ^blog/([a-z0-9-]+)/?$ blog-post.php?slug=$1 [L,QSA]
+RewriteRule ^pages/([a-z0-9-]+)/?$ page.php?slug=$1 [L,QSA]
 </IfModule>

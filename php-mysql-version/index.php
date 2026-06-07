@@ -15,18 +15,18 @@ render_header('Free Tools for Creators');
         <h1 class="h1"><?= e(setting('homeHeroTitle', 'CreatorTool.in')) ?></h1>
         <p class="lead"><?= e(setting('homeHeroSubtitle', 'Fast tools for YouTubers, editors, videographers, streamers, and content creators.')) ?></p>
         <div class="button-row">
-          <a class="btn-primary" href="/tools.php">Explore all tools</a>
-          <a class="btn-secondary" href="/blog.php">Read creator guides</a>
+          <a class="btn-primary" href="/tools">Explore all tools</a>
+          <a class="btn-secondary" href="/blog">Read creator guides</a>
         </div>
       </div>
       <div class="card hero-search">
         <label class="label">
           Quick search
-          <input class="input search-input" placeholder="Try bitrate, thumbnail, subtitle..." onkeydown="if(event.key==='Enter') location.href='/tools.php?q='+encodeURIComponent(this.value)">
+          <input class="input search-input" placeholder="Try bitrate, thumbnail, subtitle..." onkeydown="if(event.key==='Enter') location.href='/tools?q='+encodeURIComponent(this.value)">
         </label>
         <div class="mini-grid">
           <?php foreach (array_slice($popular, 0, 4) as $tool): ?>
-            <a class="mini-tool" href="/tool.php?slug=<?= e($tool['slug']) ?>"><?= e($tool['name']) ?></a>
+            <a class="mini-tool" href="<?= e(tool_url($tool['slug'])) ?>"><?= e($tool['name']) ?></a>
           <?php endforeach; ?>
         </div>
       </div>
@@ -44,7 +44,7 @@ render_header('Free Tools for Creators');
     </div>
     <div class="grid-auto">
       <?php foreach ($interest as $tool): ?>
-        <a class="card tool-card compact" href="/tool.php?slug=<?= e($tool['slug']) ?>">
+        <a class="card tool-card compact" href="<?= e(tool_url($tool['slug'])) ?>">
           <span class="icon"><?= e($tool['icon_name'] ?: substr($tool['name'], 0, 2)) ?></span>
           <p class="eyebrow"><?= e($tool['category']) ?></p>
           <h3><?= e($tool['name']) ?></h3>
@@ -62,11 +62,11 @@ render_header('Free Tools for Creators');
         <p class="eyebrow">Browse by category</p>
         <h2>Tool categories</h2>
       </div>
-      <a class="text-link" href="/tools.php">View all</a>
+      <a class="text-link" href="/tools">View all</a>
     </div>
     <div class="grid-auto">
       <?php foreach ($categories as $category): ?>
-        <a class="card category-card" href="/category.php?slug=<?= e($category['slug']) ?>">
+        <a class="card category-card" href="<?= e(category_url($category['slug'])) ?>">
           <span class="icon"><?= e($category['icon'] ?: 'CT') ?></span>
           <h3><?= e($category['name']) ?></h3>
           <p class="muted"><?= e($category['description']) ?></p>
@@ -86,10 +86,10 @@ render_header('Free Tools for Creators');
       </div>
     </div>
     <div class="grid-auto">
-      <a class="card workflow-card" href="/category.php?slug=youtube-tools"><h3>For YouTubers</h3><p class="muted">Titles, descriptions, hashtags, upload checklists, thumbnails, and storage planning for every upload.</p><span>Open workflow</span></a>
-      <a class="card workflow-card" href="/category.php?slug=video-calculators"><h3>For Editors</h3><p class="muted">Bitrate, file size, export settings, frame rate conversion, subtitles, and drive planning.</p><span>Open workflow</span></a>
-      <a class="card workflow-card" href="/category.php?slug=live-streaming-tools"><h3>For Live Streamers</h3><p class="muted">OBS bitrate, upload speed, platform settings, audio delay, and stream recording storage.</p><span>Open workflow</span></a>
-      <a class="card workflow-card" href="/category.php?slug=camera-tools"><h3>For Photographers</h3><p class="muted">Crop factor, SD card planning, daily shoot storage, and multi-camera coverage estimates.</p><span>Open workflow</span></a>
+      <a class="card workflow-card" href="/categories/youtube-tools"><h3>For YouTubers</h3><p class="muted">Titles, descriptions, hashtags, upload checklists, thumbnails, and storage planning for every upload.</p><span>Open workflow</span></a>
+      <a class="card workflow-card" href="/categories/video-calculators"><h3>For Editors</h3><p class="muted">Bitrate, file size, export settings, frame rate conversion, subtitles, and drive planning.</p><span>Open workflow</span></a>
+      <a class="card workflow-card" href="/categories/live-streaming-tools"><h3>For Live Streamers</h3><p class="muted">OBS bitrate, upload speed, platform settings, audio delay, and stream recording storage.</p><span>Open workflow</span></a>
+      <a class="card workflow-card" href="/categories/camera-tools"><h3>For Photographers</h3><p class="muted">Crop factor, SD card planning, daily shoot storage, and multi-camera coverage estimates.</p><span>Open workflow</span></a>
     </div>
   </section>
 
@@ -102,7 +102,7 @@ render_header('Free Tools for Creators');
     </div>
     <div class="grid-auto">
       <?php foreach ($featured as $tool): ?>
-        <a class="card tool-card" href="/tool.php?slug=<?= e($tool['slug']) ?>">
+        <a class="card tool-card" href="<?= e(tool_url($tool['slug'])) ?>">
           <span class="icon"><?= e($tool['icon_name'] ?: substr($tool['name'], 0, 2)) ?></span>
           <p class="eyebrow"><?= e($tool['category']) ?></p>
           <h3><?= e($tool['name']) ?></h3>
@@ -122,7 +122,7 @@ render_header('Free Tools for Creators');
     </div>
     <div class="grid-auto">
       <?php foreach ($popular as $tool): ?>
-        <a class="card tool-card" href="/tool.php?slug=<?= e($tool['slug']) ?>">
+        <a class="card tool-card" href="<?= e(tool_url($tool['slug'])) ?>">
           <span class="icon"><?= e($tool['icon_name'] ?: substr($tool['name'], 0, 2)) ?></span>
           <p class="eyebrow"><?= e($tool['category']) ?></p>
           <h3><?= e($tool['name']) ?></h3>
@@ -147,11 +147,11 @@ render_header('Free Tools for Creators');
         <p class="eyebrow">Guides</p>
         <h2>Latest creator articles</h2>
       </div>
-      <a class="text-link" href="/blog.php">View blog</a>
+      <a class="text-link" href="/blog">View blog</a>
     </div>
     <div class="grid-auto">
       <?php foreach ($posts as $post): ?>
-        <a class="card article-card" href="/blog-post.php?slug=<?= e($post['slug']) ?>">
+        <a class="card article-card" href="<?= e(blog_url($post['slug'])) ?>">
           <p class="eyebrow">Creator guide</p>
           <h3><?= e($post['title']) ?></h3>
           <p class="muted"><?= e($post['excerpt']) ?></p>

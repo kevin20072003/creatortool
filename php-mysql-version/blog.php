@@ -10,7 +10,7 @@ render_header('Creator Blog', 'Guides for YouTubers, editors, videographers, liv
   <?php ad_slot('header'); ?>
   <div class="grid-auto">
     <?php foreach ($posts as $post): ?>
-      <a class="card tool-card" href="/blog-post.php?slug=<?= e($post['slug']) ?>">
+      <a class="card tool-card" href="<?= e(blog_url($post['slug'])) ?>">
         <p class="eyebrow">Guide</p>
         <h3><?= e($post['title']) ?></h3>
         <p class="muted"><?= e($post['excerpt']) ?></p>

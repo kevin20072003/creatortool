@@ -34,6 +34,6 @@ $categories = q('SELECT * FROM categories ORDER BY sort_order, name')->fetchAll(
     <label class="label">Description<textarea class="textarea" name="description"><?= e($edit['description'] ?? '') ?></textarea></label>
     <p><button class="btn-primary" type="submit">Save category</button> <a class="btn-secondary" href="/admin/categories.php">Clear</a></p>
   </form>
-  <section class="card section"><h2>Categories</h2><table class="table"><tr><th>Name</th><th>Slug</th><th>Actions</th></tr><?php foreach ($categories as $cat): ?><tr><td><?= e($cat['name']) ?></td><td><?= e($cat['slug']) ?></td><td><a href="/category.php?slug=<?= e($cat['slug']) ?>">Preview</a> | <a href="?edit=<?= e((string)$cat['id']) ?>">Edit</a> | <a href="?delete=<?= e((string)$cat['id']) ?>" onclick="return confirm('Delete category? Tools in this category may need reassignment.')">Delete</a></td></tr><?php endforeach; ?></table></section>
+  <section class="card section"><h2>Categories</h2><table class="table"><tr><th>Name</th><th>Slug</th><th>Actions</th></tr><?php foreach ($categories as $cat): ?><tr><td><?= e($cat['name']) ?></td><td><?= e($cat['slug']) ?></td><td><a href="<?= e(category_url($cat['slug'])) ?>">Preview</a> | <a href="?edit=<?= e((string)$cat['id']) ?>">Edit</a> | <a href="?delete=<?= e((string)$cat['id']) ?>" onclick="return confirm('Delete category? Tools in this category may need reassignment.')">Delete</a></td></tr><?php endforeach; ?></table></section>
 </main>
 <?php admin_footer(); ?>

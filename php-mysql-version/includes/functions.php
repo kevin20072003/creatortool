@@ -37,6 +37,22 @@ function page_title(string $title = ''): string {
     return $title ? $title . ' - ' . $siteName : $siteName . ' - Free Creator Tools';
 }
 
+function tool_url(string $slug): string {
+    return '/tools/' . rawurlencode($slug);
+}
+
+function category_url(string $slug): string {
+    return '/categories/' . rawurlencode($slug);
+}
+
+function blog_url(string $slug): string {
+    return '/blog/' . rawurlencode($slug);
+}
+
+function page_url(string $slug): string {
+    return '/pages/' . rawurlencode($slug);
+}
+
 function analytics_country(): string {
     foreach (['HTTP_CF_IPCOUNTRY', 'HTTP_X_COUNTRY_CODE', 'GEOIP_COUNTRY_CODE', 'HTTP_X_APPENGINE_COUNTRY'] as $key) {
         $value = strtoupper(trim($_SERVER[$key] ?? ''));

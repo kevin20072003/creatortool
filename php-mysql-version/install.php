@@ -149,6 +149,11 @@ $tools = [
     ['Reel Hook Generator', 'reel-hook-generator', 'social-media-tools', 'generator', 'Generate short Reel hook ideas.', 0, 1],
     ['Content Calendar Idea Generator', 'content-calendar-idea-generator', 'content-planning-tools', 'generator', 'Generate content calendar ideas for creators.', 0, 0],
     ['Bio Generator', 'bio-generator', 'social-media-tools', 'description-generator', 'Generate short social profile bio ideas.', 0, 0],
+    ['Video SEO Title Checker', 'video-seo-title-checker', 'seo-tools', 'description-generator', 'Check whether a video title is clear, searchable, and clickable for YouTube and Google.', 0, 1],
+    ['Meta Description Generator', 'meta-description-generator', 'seo-tools', 'description-generator', 'Create concise SEO descriptions for tool pages, blog posts, and creator guides.', 0, 1],
+    ['YouTube Keyword Idea Generator', 'youtube-keyword-idea-generator', 'seo-tools', 'generator', 'Generate keyword ideas for YouTube videos, tutorials, reviews, and creator workflows.', 0, 1],
+    ['Content Brief Generator', 'content-brief-generator', 'seo-tools', 'description-generator', 'Create a simple SEO content brief with angle, keywords, sections, and FAQs.', 0, 0],
+    ['FAQ Schema Idea Generator', 'faq-schema-idea-generator', 'seo-tools', 'generator', 'Generate useful FAQ ideas for tool pages and blog posts.', 0, 0],
 ];
 
 foreach ($tools as $i => $tool) {
@@ -218,10 +223,12 @@ foreach ([
     'search_console_code' => '',
     'custom_head_code' => '',
     'maintenance_message' => '',
+    'ads_enabled' => '0',
+    'show_ad_placeholders' => '0',
 ] as $name => $value) {
     upsert('settings', ['name' => $name, 'value' => $value], 'name');
 }
-foreach (['header', 'in-content', 'sidebar', 'footer'] as $slot) upsert('ad_slots', ['name' => $slot, 'code' => '', 'enabled' => 1], 'name');
+foreach (['header', 'in-content', 'sidebar', 'footer', 'after-tool', 'between-sections', 'tools-list'] as $slot) upsert('ad_slots', ['name' => $slot, 'code' => '', 'enabled' => 0], 'name');
 
 ?>
 <!doctype html>

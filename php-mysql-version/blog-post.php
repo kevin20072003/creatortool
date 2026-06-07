@@ -5,15 +5,15 @@ $post = q('SELECT * FROM blog_posts WHERE slug = ? AND status = "published"', [$
 if (!$post) {
     http_response_code(404);
     render_header('Post not found');
-    echo '<main class="container section"><h1>Post not found</h1><p><a class="btn-secondary" href="/blog.php">Back to blog</a></p></main>';
+    echo '<main class="container section"><h1>Post not found</h1><p><a class="btn-secondary" href="/blog">Back to blog</a></p></main>';
     render_footer();
     exit;
 }
-track_event('blog_view', '/blog-post.php?slug=' . $slug, $slug);
+track_event('blog_view', blog_url($slug), $slug);
 render_header($post['seo_title'] ?: $post['title'], $post['seo_description'] ?: $post['excerpt']);
 ?>
 <main class="container section">
-  <p class="muted"><a href="/">Home</a> / <a href="/blog.php">Blog</a></p>
+  <p class="muted"><a href="/">Home</a> / <a href="/blog">Blog</a></p>
   <article class="card prose">
     <h1><?= e($post['title']) ?></h1>
     <p class="muted"><?= e($post['excerpt']) ?></p>
