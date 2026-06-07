@@ -18,7 +18,8 @@ function admin_header(string $title): void {
   <header class="site-header">
     <div class="container nav">
       <a class="brand" href="/admin/index.php"><?php if ($logo): ?><img src="<?= e($logo) ?>" alt="<?= e($siteName) ?>"><?php else: ?><span>CT</span><?php endif; ?>Admin</a>
-      <nav class="nav-links open">
+      <button class="menu-btn" type="button" data-menu>Menu</button>
+      <nav class="nav-links" data-nav>
         <a href="/admin/index.php">Dashboard</a>
         <?php if (can('tools')): ?><a href="/admin/tools.php">Tools</a><?php endif; ?>
         <?php if (can('categories')): ?><a href="/admin/categories.php">Categories</a><?php endif; ?>

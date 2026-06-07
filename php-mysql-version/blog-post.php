@@ -20,5 +20,6 @@ render_header($post['seo_title'] ?: $post['title'], $post['seo_description'] ?: 
     <?php ad_slot('in-content'); ?>
     <?= markdown($post['content']) ?>
   </article>
+  <?php ad_slot('footer'); ?>
 </main>
 <?php render_footer(); ?>

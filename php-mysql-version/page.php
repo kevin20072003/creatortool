@@ -15,5 +15,6 @@ render_header($page['seo_title'] ?: $page['title'], $page['seo_description'] ?: 
   <article class="card prose">
     <?= markdown($page['content']) ?>
   </article>
+  <?php ad_slot('footer'); ?>
 </main>
 <?php render_footer(); ?>

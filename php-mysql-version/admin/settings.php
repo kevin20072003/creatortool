@@ -23,6 +23,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     foreach ($_POST['settings'] ?? [] as $name => $value) {
         q('INSERT INTO settings (name, value) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$name, trim($value)]);
     }
+    if (!empty($_POST['remove_logo'])) {
+        q('INSERT INTO settings (name, value) VALUES ("site_logo", "") ON DUPLICATE KEY UPDATE value = VALUES(value)');
+    }
+    if (!empty($_POST['remove_favicon'])) {
+        q('INSERT INTO settings (name, value) VALUES ("site_favicon", "") ON DUPLICATE KEY UPDATE value = VALUES(value)');
+    }
     $logo = upload_admin_image('site_logo_file');
     if ($logo) q('INSERT INTO settings (name, value) VALUES ("site_logo", ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$logo]);
     $favicon = upload_admin_image('site_favicon_file');
@@ -34,6 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $ads = q('SELECT * FROM ad_slots ORDER BY name')->fetchAll();
+$currentLogo = setting('site_logo');
+$currentFavicon = setting('site_favicon');
 ?>
 <main class="container section">
   <p class="eyebrow">Settings</p>
@@ -41,11 +49,17 @@ $ads = q('SELECT * FROM ad_slots ORDER BY name')->fetchAll();
   <?php if ($message): ?><p class="result-box"><?= e($message) ?></p><?php endif; ?>
   <form class="card" method="post" enctype="multipart/form-data">
     <h2>Brand</h2>
-    <div class="grid-auto">
-      <label class="label">Logo image<input class="input" type="file" name="site_logo_file" accept="image/*"></label>
-      <label class="label">Favicon image<input class="input" type="file" name="site_favicon_file" accept="image/*,.ico"></label>
-      <label class="label">Current logo URL<input class="input" name="settings[site_logo]" value="<?= e(setting('site_logo')) ?>"></label>
-      <label class="label">Current favicon URL<input class="input" name="settings[site_favicon]" value="<?= e(setting('site_favicon')) ?>"></label>
+    <div class="grid-auto brand-upload-grid">
+      <div class="upload-card">
+        <div class="upload-preview"><?php if ($currentLogo): ?><img src="<?= e($currentLogo) ?>" alt="Current logo"><?php else: ?><span>CT</span><?php endif; ?></div>
+        <label class="label">Upload logo file<input class="input file-input" type="file" name="site_logo_file" accept="image/*"></label>
+        <label class="check-row"><input type="checkbox" name="remove_logo"> Remove current logo</label>
+      </div>
+      <div class="upload-card">
+        <div class="upload-preview small"><?php if ($currentFavicon): ?><img src="<?= e($currentFavicon) ?>" alt="Current favicon"><?php else: ?><span>ICO</span><?php endif; ?></div>
+        <label class="label">Upload favicon file<input class="input file-input" type="file" name="site_favicon_file" accept="image/*,.ico"></label>
+        <label class="check-row"><input type="checkbox" name="remove_favicon"> Remove current favicon</label>
+      </div>
     </div>
 
     <h2>Content and SEO</h2>

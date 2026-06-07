@@ -10,6 +10,8 @@ if (!$tool) {
     exit;
 }
 track_event('page_view', '/tool.php?slug=' . $slug, $slug);
+$relatedTools = q('SELECT t.*, c.name category FROM tools t LEFT JOIN categories c ON c.id = t.category_id WHERE t.status = "published" AND t.id != ? AND (t.category_id = ? OR t.popular = 1) ORDER BY (t.category_id = ?) DESC, t.popular DESC, t.sort_order ASC LIMIT 6', [$tool['id'], $tool['category_id'], $tool['category_id']])->fetchAll();
+$relatedPosts = q('SELECT * FROM blog_posts WHERE status = "published" ORDER BY created_at DESC, id DESC LIMIT 3')->fetchAll();
 render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $tool['description']);
 ?>
 <main class="container section">
@@ -49,6 +51,7 @@ render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $
       <aside class="card result-panel">
         <p class="eyebrow">Result summary</p>
         <pre data-result class="muted"></pre>
+        <?php ad_slot('sidebar'); ?>
       </aside>
     </div>
     <div class="grid-auto">
@@ -59,5 +62,31 @@ render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $
   <?php ad_slot('in-content'); ?>
   <article class="card prose"><?= markdown($tool['content']) ?></article>
   <section class="card"><h2>FAQ</h2><?php foreach (q('SELECT * FROM faqs WHERE tool_id = ? ORDER BY sort_order', [$tool['id']])->fetchAll() as $faq): ?><details><summary><?= e($faq['question']) ?></summary><p class="muted"><?= e($faq['answer']) ?></p></details><?php endforeach; ?></section>
+  <section class="section">
+    <div class="section-head"><div><p class="eyebrow">Next steps</p><h2>Related tools</h2></div></div>
+    <div class="grid-auto">
+      <?php foreach ($relatedTools as $item): ?>
+        <a class="card tool-card compact" href="/tool.php?slug=<?= e($item['slug']) ?>">
+          <span class="icon"><?= e($item['icon_name'] ?: substr($item['name'], 0, 2)) ?></span>
+          <p class="eyebrow"><?= e($item['category']) ?></p>
+          <h3><?= e($item['name']) ?></h3>
+          <p class="muted"><?= e($item['description']) ?></p>
+        </a>
+      <?php endforeach; ?>
+    </div>
+  </section>
+  <?php ad_slot('footer'); ?>
+  <section class="section">
+    <div class="section-head"><div><p class="eyebrow">Learn more</p><h2>Related guides</h2></div><a class="text-link" href="/blog.php">View blog</a></div>
+    <div class="grid-auto">
+      <?php foreach ($relatedPosts as $post): ?>
+        <a class="card article-card" href="/blog-post.php?slug=<?= e($post['slug']) ?>">
+          <p class="eyebrow">Creator guide</p>
+          <h3><?= e($post['title']) ?></h3>
+          <p class="muted"><?= e($post['excerpt']) ?></p>
+        </a>
+      <?php endforeach; ?>
+    </div>
+  </section>
 </main>
 <?php render_footer(); ?>

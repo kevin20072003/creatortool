@@ -27,5 +27,6 @@ render_header($category['seo_title'] ?: $category['name'], $category['seo_descri
       </a>
     <?php endforeach; ?>
   </div>
+  <?php ad_slot('in-content'); ?>
 </main>
 <?php render_footer(); ?>

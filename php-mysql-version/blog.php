@@ -7,6 +7,7 @@ render_header('Creator Blog', 'Guides for YouTubers, editors, videographers, liv
   <p class="eyebrow">Creator guides</p>
   <h1>Latest blog posts</h1>
   <p class="lead">Practical guides for planning, recording, editing, streaming, and uploading better content.</p>
+  <?php ad_slot('header'); ?>
   <div class="grid-auto">
     <?php foreach ($posts as $post): ?>
       <a class="card tool-card" href="/blog-post.php?slug=<?= e($post['slug']) ?>">
@@ -16,5 +17,6 @@ render_header('Creator Blog', 'Guides for YouTubers, editors, videographers, liv
       </a>
     <?php endforeach; ?>
   </div>
+  <?php ad_slot('footer'); ?>
 </main>
 <?php render_footer(); ?>
