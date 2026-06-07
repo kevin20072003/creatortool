@@ -6,8 +6,8 @@ require_once __DIR__ . '/includes/auth.php';
 try {
     ensure_admin_schema();
     $settings = [
-        'site_name' => 'CreatorTools.in',
-        'homeHeroTitle' => 'CreatorTools.in',
+        'site_name' => 'CreatorTool.in',
+        'homeHeroTitle' => 'CreatorTool.in',
         'homeHeroSubtitle' => 'Fast tools for YouTubers, editors, videographers, streamers, and content creators.',
         'global_meta_description' => 'Free calculators and generators for YouTubers, editors, videographers, streamers, and content creators.',
         'footer_text' => 'Free creator tools for YouTubers, editors, videographers, and streamers.',

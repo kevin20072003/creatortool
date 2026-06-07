@@ -10,7 +10,7 @@ $recent = q('SELECT * FROM analytics_events ORDER BY created_at DESC LIMIT 10')-
 ?>
 <main class="container section">
   <p class="eyebrow">Dashboard</p>
-  <h1>CreatorTools admin</h1>
+  <h1>CreatorTool admin</h1>
   <div class="grid-auto">
     <div class="card result-box"><p>Total tools</p><strong><?= e((string)$totalTools) ?></strong></div>
     <div class="card result-box"><p>Published</p><strong><?= e((string)$publishedTools) ?></strong></div>

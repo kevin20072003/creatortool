@@ -9,7 +9,7 @@ $ok = false;
 try {
     require_once __DIR__ . '/includes/db.php';
 
-    if (DB_NAME === 'creatortools_db' || DB_USER === 'creatortools_user' || DB_PASS === 'change-this-password') {
+    if (DB_NAME === 'CreatorTool_db' || DB_USER === 'CreatorTool_user' || DB_PASS === 'change-this-password') {
         $status = 'Config still has default sample values';
         $detail = 'Edit includes/config.php and add the real Hostinger MySQL database name, username, and password.';
     } else {
@@ -29,7 +29,7 @@ try {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CreatorTools DB Check</title>
+  <title>CreatorTool DB Check</title>
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>

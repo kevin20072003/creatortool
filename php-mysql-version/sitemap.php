@@ -4,7 +4,7 @@ $tools = q('SELECT name, slug FROM tools WHERE status = "published" ORDER BY nam
 $categories = q('SELECT name, slug FROM categories ORDER BY sort_order, name')->fetchAll();
 $posts = q('SELECT title, slug FROM blog_posts WHERE status = "published" ORDER BY title')->fetchAll();
 $pages = q('SELECT title, slug FROM pages ORDER BY title')->fetchAll();
-render_header('Sitemap', 'All pages, tools, categories, and blog posts on CreatorTools.in.');
+render_header('Sitemap', 'All pages, tools, categories, and blog posts on CreatorTool.in.');
 ?>
 <main class="container section">
   <h1>Sitemap</h1>

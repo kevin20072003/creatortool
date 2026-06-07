@@ -27,7 +27,7 @@ export default async function BlogDetailPage({ params }: PageProps) {
   return (
     <main className="container py-10">
       <TrackEvent type="blog_view" path={`/blog/${post.slug}`} entitySlug={post.slug} />
-      {jsonLd({ "@context": "https://schema.org", "@type": "Article", headline: post.title, description: post.excerpt, datePublished: post.publishedAt, author: { "@type": "Organization", name: "CreatorTools.in" } })}
+      {jsonLd({ "@context": "https://schema.org", "@type": "Article", headline: post.title, description: post.excerpt, datePublished: post.publishedAt, author: { "@type": "Organization", name: "CreatorTool.in" } })}
       <article className="mx-auto max-w-3xl">
         <Link className="text-sm font-black text-[var(--primary)]" href="/blog">Back to blog</Link>
         <p className="mt-6 text-sm font-black uppercase tracking-wide text-[var(--accent)]">{post.category?.name || "Creator Guide"} · {formatDate(post.publishedAt)}</p>

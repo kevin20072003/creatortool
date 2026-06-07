@@ -4,8 +4,8 @@ define('DB_NAME', 'your_database_name');
 define('DB_USER', 'your_database_user');
 define('DB_PASS', 'your_database_password');
 
-define('SITE_URL', 'https://creatortools.in');
-define('SITE_NAME', 'CreatorTools.in');
+define('SITE_URL', 'https://CreatorTool.in');
+define('SITE_NAME', 'CreatorTool.in');
 
 define('ADMIN_EMAIL', 'admin@example.com');
 define('ADMIN_PASSWORD', 'change-this-password');

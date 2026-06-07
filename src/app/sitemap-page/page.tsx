@@ -6,7 +6,7 @@ import { createMetadata } from "@/lib/seo";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
-  return createMetadata({ title: "Sitemap - CreatorTools.in", path: "/sitemap-page", settings: await getSettings() });
+  return createMetadata({ title: "Sitemap - CreatorTool.in", path: "/sitemap-page", settings: await getSettings() });
 }
 
 export default async function SitemapPage() {

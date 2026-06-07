@@ -16,6 +16,6 @@ export function setting(settings: SettingMap, key: string, fallback = "") {
 }
 
 export function siteUrl(path = "") {
-  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://creatortools.in").replace(/\/$/, "");
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || "https://CreatorTool.in").replace(/\/$/, "");
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }

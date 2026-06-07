@@ -26,11 +26,11 @@ export default async function Home() {
       {jsonLd({
         "@context": "https://schema.org",
         "@type": "WebSite",
-        name: "CreatorTools.in",
-        url: process.env.NEXT_PUBLIC_SITE_URL || "https://creatortools.in",
+        name: "CreatorTool.in",
+        url: process.env.NEXT_PUBLIC_SITE_URL || "https://CreatorTool.in",
         potentialAction: {
           "@type": "SearchAction",
-          target: `${process.env.NEXT_PUBLIC_SITE_URL || "https://creatortools.in"}/tools?q={search_term_string}`,
+          target: `${process.env.NEXT_PUBLIC_SITE_URL || "https://CreatorTool.in"}/tools?q={search_term_string}`,
           "query-input": "required name=search_term_string",
         },
       })}
@@ -38,7 +38,7 @@ export default async function Home() {
         <div className="container grid gap-8 py-12 md:grid-cols-[1.1fr_0.9fr] md:py-16">
           <div className="flex flex-col justify-center">
             <p className="mb-4 text-sm font-black uppercase tracking-wide text-[var(--accent)]">Free creator calculators and generators</p>
-            <h1 className="max-w-3xl text-4xl font-black leading-tight md:text-6xl">{setting(settings, "homeHeroTitle", "CreatorTools.in")}</h1>
+            <h1 className="max-w-3xl text-4xl font-black leading-tight md:text-6xl">{setting(settings, "homeHeroTitle", "CreatorTool.in")}</h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 muted">{setting(settings, "homeHeroSubtitle", "Fast tools for YouTubers, editors, videographers, streamers, and content creators.")}</p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link className="btn-primary" href="/tools">Explore all tools</Link>
@@ -171,7 +171,7 @@ export default async function Home() {
           <h2 className="text-2xl font-black">FAQ</h2>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {[
-              ["Is CreatorTools.in free?", "Yes. The initial calculators and generators are free and run without an external backend."],
+              ["Is CreatorTool.in free?", "Yes. The initial calculators and generators are free and run without an external backend."],
               ["Can I add more tools later?", "Yes. The admin panel supports content-only tools and tools attached to existing calculator or generator templates."],
               ["Does it support Adsense?", "Yes. You can paste ad slot code from the admin panel. Empty slots show placeholders."],
               ["Where is data stored?", "Tools, posts, pages, settings, users, media records, and analytics are stored in local SQLite."],

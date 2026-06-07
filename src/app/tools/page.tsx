@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const settings = await getSettings();
-  return createMetadata({ title: "All Creator Tools - CreatorTools.in", description: "Browse free YouTube, video, thumbnail, subtitle, streaming, camera, audio, SEO, and creator planning tools.", path: "/tools", settings });
+  return createMetadata({ title: "All Creator Tools - CreatorTool.in", description: "Browse free YouTube, video, thumbnail, subtitle, streaming, camera, audio, SEO, and creator planning tools.", path: "/tools", settings });
 }
 
 export default async function ToolsPage() {

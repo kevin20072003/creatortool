@@ -1,6 +1,6 @@
-# CreatorTools.in PHP + MySQL Version
+# CreatorTool.in PHP + MySQL Version
 
-This folder is a Hostinger-friendly PHP/MySQL version of CreatorTools.in. Use this when you do not want the Next.js Node.js deployment.
+This folder is a Hostinger-friendly PHP/MySQL version of CreatorTool.in. Use this when you do not want the Next.js Node.js deployment.
 
 ## What To Choose In Hostinger
 
@@ -25,7 +25,7 @@ define('DB_HOST', 'localhost');
 define('DB_NAME', 'your_database_name');
 define('DB_USER', 'your_database_user');
 define('DB_PASS', 'your_database_password');
-define('SITE_URL', 'https://creatortools.in');
+define('SITE_URL', 'https://CreatorTool.in');
 define('ADMIN_EMAIL', 'your-email@example.com');
 define('ADMIN_PASSWORD', 'your-strong-password');
 ```
@@ -33,13 +33,13 @@ define('ADMIN_PASSWORD', 'your-strong-password');
 8. Open this URL once:
 
 ```text
-https://creatortools.in/install.php
+https://CreatorTool.in/install.php
 ```
 
 If install does not open, run this check page:
 
 ```text
-https://creatortools.in/db-check.php
+https://CreatorTool.in/db-check.php
 ```
 
 It will show whether MySQL credentials are correct.
@@ -47,7 +47,7 @@ It will show whether MySQL credentials are correct.
 9. After install completes, login here:
 
 ```text
-https://creatortools.in/admin/login.php
+https://CreatorTool.in/admin/login.php
 ```
 
 10. Delete or rename `install.php` and `db-check.php` after setup.

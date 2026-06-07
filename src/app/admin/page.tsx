@@ -13,7 +13,7 @@ export default async function AdminLoginPage({ searchParams }: { searchParams: P
     <main className="container grid min-h-[70vh] place-items-center py-10">
       <form action={loginAction} className="card grid w-full max-w-md gap-4 p-6">
         <div>
-          <p className="text-sm font-black uppercase tracking-wide text-[var(--accent)]">CreatorTools.in</p>
+          <p className="text-sm font-black uppercase tracking-wide text-[var(--accent)]">CreatorTool.in</p>
           <h1 className="mt-2 text-3xl font-black">Admin login</h1>
           <p className="mt-2 text-sm muted">Sign in to manage tools, posts, SEO, media, ads, settings, and analytics.</p>
         </div>

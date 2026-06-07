@@ -1,4 +1,4 @@
-# CreatorTools.in
+# CreatorTool.in
 
 ## Hostinger PHP/MySQL Version
 
@@ -44,7 +44,7 @@ DATABASE_URL=file:./dev.db
 NEXTAUTH_SECRET=use-a-long-random-secret
 ADMIN_EMAIL=admin@example.com
 ADMIN_PASSWORD=change-this-password
-NEXT_PUBLIC_SITE_URL=https://creatortools.in
+NEXT_PUBLIC_SITE_URL=https://CreatorTool.in
 ```
 
 Change `NEXTAUTH_SECRET`, `ADMIN_EMAIL`, and `ADMIN_PASSWORD` before first seed.

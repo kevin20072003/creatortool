@@ -300,13 +300,13 @@ What you will learn:
 
 ${links}
 
-#${slugTag(topic)} #CreatorTools #YouTubeTips`;
+#${slugTag(topic)} #CreatorTool #YouTubeTips`;
   return { text, summary: ["Description", "Ready", "Template", "generator"] };
 }
 
 function hashtagGeneratorOutput() {
   const words = (val("keyword") || "youtube creator tools").split(/[, ]+/).filter(Boolean);
-  const tags = [...new Set(words.map(slugTag)), "CreatorTools", "YouTubeTips", "VideoEditing"].map((tag) => `#${tag}`);
+  const tags = [...new Set(words.map(slugTag)), "CreatorTool", "YouTubeTips", "VideoEditing"].map((tag) => `#${tag}`);
   return { text: tags.join(" "), summary: ["Hashtags", `${tags.length}`, "Copy", "generator"] };
 }
 

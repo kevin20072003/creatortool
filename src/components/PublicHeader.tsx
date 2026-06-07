@@ -10,7 +10,7 @@ const nav = [
   ["Contact", "/contact"],
 ];
 
-export function PublicHeader({ siteName = "CreatorTools.in" }: { siteName?: string }) {
+export function PublicHeader({ siteName = "CreatorTool.in" }: { siteName?: string }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {

@@ -12,7 +12,7 @@ render_header('Free Tools for Creators');
     <div class="container hero-grid">
       <div class="hero-copy">
         <p class="eyebrow">Free creator calculators and generators</p>
-        <h1 class="h1"><?= e(setting('homeHeroTitle', 'CreatorTools.in')) ?></h1>
+        <h1 class="h1"><?= e(setting('homeHeroTitle', 'CreatorTool.in')) ?></h1>
         <p class="lead"><?= e(setting('homeHeroSubtitle', 'Fast tools for YouTubers, editors, videographers, streamers, and content creators.')) ?></p>
         <div class="button-row">
           <a class="btn-primary" href="/tools.php">Explore all tools</a>
@@ -160,7 +160,7 @@ render_header('Free Tools for Creators');
     <div class="card faq-card">
       <h2>FAQ</h2>
       <div class="faq-grid">
-        <details><summary>Is CreatorTools.in free?</summary><p class="muted">Yes. The calculators and generators are free and run without an external backend.</p></details>
+        <details><summary>Is CreatorTool.in free?</summary><p class="muted">Yes. The calculators and generators are free and run without an external backend.</p></details>
         <details><summary>Can I add more tools later?</summary><p class="muted">Yes. The admin panel supports content tools and tools attached to existing calculator or generator templates.</p></details>
         <details><summary>Does it support Adsense?</summary><p class="muted">Yes. You can paste ad slot code from the admin settings page. Empty slots show placeholders.</p></details>
         <details><summary>Where is data stored?</summary><p class="muted">Tools, posts, pages, settings, media records, and analytics are stored in your Hostinger MySQL database.</p></details>

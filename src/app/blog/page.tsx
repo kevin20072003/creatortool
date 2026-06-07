@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 
 export async function generateMetadata() {
   const settings = await getSettings();
-  return createMetadata({ title: "Creator Blog - CreatorTools.in", description: "Useful video, YouTube, streaming, thumbnail, bitrate, storage, and creator workflow guides.", path: "/blog", settings, type: "article" });
+  return createMetadata({ title: "Creator Blog - CreatorTool.in", description: "Useful video, YouTube, streaming, thumbnail, bitrate, storage, and creator workflow guides.", path: "/blog", settings, type: "article" });
 }
 
 export default async function BlogPage() {

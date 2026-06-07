@@ -68,7 +68,7 @@ Good planning saves storage space, upload time, and rework. Whether you shoot Yo
 
 ## Practical workflow
 
-Start with the platform or delivery goal, then choose resolution, frame rate, bitrate, storage, and export format. Use the calculators on CreatorTools.in to check the numbers before you record or publish.
+Start with the platform or delivery goal, then choose resolution, frame rate, bitrate, storage, and export format. Use the calculators on CreatorTool.in to check the numbers before you record or publish.
 
 ## Quick example
 
@@ -87,7 +87,7 @@ async function main() {
   await prisma.user.upsert({
     where: { email: adminEmail },
     update: { passwordHash },
-    create: { email: adminEmail, name: "CreatorTools Admin", passwordHash },
+    create: { email: adminEmail, name: "CreatorTool Admin", passwordHash },
   });
 
   for (let i = 0; i < categories.length; i++) {
@@ -101,7 +101,7 @@ async function main() {
         description,
         icon,
         sortOrder: i,
-        seoTitle: `${name} - CreatorTools.in`,
+        seoTitle: `${name} - CreatorTool.in`,
         seoDescription: description,
       },
     });
@@ -191,7 +191,7 @@ Use this tool before a shoot, stream, or upload to avoid storage surprises and c
         status: "published",
         publishedAt: new Date(),
         categoryId: blogCategory ? blogCategory.id : null,
-        seoTitle: `${title} - CreatorTools.in`,
+        seoTitle: `${title} - CreatorTool.in`,
         seoDescription: `${title} explained with simple examples for creators.`,
         tags: "YouTube, video, creator tools",
       },
@@ -203,7 +203,7 @@ Use this tool before a shoot, stream, or upload to avoid storage surprises and c
         status: "published",
         publishedAt: new Date(),
         categoryId: blogCategory ? blogCategory.id : null,
-        seoTitle: `${title} - CreatorTools.in`,
+        seoTitle: `${title} - CreatorTool.in`,
         seoDescription: `${title} explained with simple examples for creators.`,
         tags: "YouTube, video, creator tools",
       },
@@ -211,23 +211,23 @@ Use this tool before a shoot, stream, or upload to avoid storage surprises and c
   }
 
   const pages = [
-    ["About", "about", "# About CreatorTools.in\n\nCreatorTools.in helps YouTubers, editors, videographers, streamers, and creators solve everyday production problems quickly. The site focuses on useful calculators, generators, and guides that make video planning easier."],
-    ["Contact", "contact", "# Contact\n\nFor support, partnerships, or tool suggestions, email the CreatorTools.in team. You can update this contact content from the admin Page Manager."],
-    ["Privacy Policy", "privacy-policy", "# Privacy Policy\n\nCreatorTools.in stores basic analytics such as page views, tool usage, search queries, referrers, and device type to improve the website. No third-party analytics service is required by default."],
-    ["Terms and Conditions", "terms-and-conditions", "# Terms and Conditions\n\nUse CreatorTools.in for planning and educational purposes. Results are estimates and should be checked against your camera, editing software, and platform settings."],
+    ["About", "about", "# About CreatorTool.in\n\nCreatorTool.in helps YouTubers, editors, videographers, streamers, and creators solve everyday production problems quickly. The site focuses on useful calculators, generators, and guides that make video planning easier."],
+    ["Contact", "contact", "# Contact\n\nFor support, partnerships, or tool suggestions, email the CreatorTool.in team. You can update this contact content from the admin Page Manager."],
+    ["Privacy Policy", "privacy-policy", "# Privacy Policy\n\nCreatorTool.in stores basic analytics such as page views, tool usage, search queries, referrers, and device type to improve the website. No third-party analytics service is required by default."],
+    ["Terms and Conditions", "terms-and-conditions", "# Terms and Conditions\n\nUse CreatorTool.in for planning and educational purposes. Results are estimates and should be checked against your camera, editing software, and platform settings."],
     ["Disclaimer", "disclaimer", "# Disclaimer\n\nCalculator results are based on standard formulas and common assumptions. Actual file size, bitrate, bandwidth, and recording time can vary by codec, container, device, and platform."],
   ];
 
   for (const [title, slug, content] of pages) {
     await prisma.page.upsert({
       where: { slug },
-      update: { title, content, seoTitle: `${title} - CreatorTools.in`, seoDescription: `${title} for CreatorTools.in.` },
-      create: { title, slug, content, seoTitle: `${title} - CreatorTools.in`, seoDescription: `${title} for CreatorTools.in.` },
+      update: { title, content, seoTitle: `${title} - CreatorTool.in`, seoDescription: `${title} for CreatorTool.in.` },
+      create: { title, slug, content, seoTitle: `${title} - CreatorTool.in`, seoDescription: `${title} for CreatorTool.in.` },
     });
   }
 
   const settings = {
-    siteName: "CreatorTools.in",
+    siteName: "CreatorTool.in",
     siteLogo: "",
     siteFavicon: "",
     adminEmail,
@@ -235,13 +235,13 @@ Use this tool before a shoot, stream, or upload to avoid storage surprises and c
     socialLinks: "https://youtube.com/, https://instagram.com/, https://x.com/",
     maintenanceMode: "false",
     darkModeDefault: "false",
-    globalTitle: "CreatorTools.in - Free Tools for YouTubers and Video Creators",
+    globalTitle: "CreatorTool.in - Free Tools for YouTubers and Video Creators",
     globalDescription: "Fast creator tools for YouTubers, editors, videographers, streamers, and content creators.",
     ogImage: "",
     robots: "index,follow",
     googleAnalytics: "",
     searchConsole: "",
-    homeHeroTitle: "CreatorTools.in",
+    homeHeroTitle: "CreatorTool.in",
     homeHeroSubtitle: "Fast calculators and generators for YouTubers, editors, videographers, live streamers, and content creators.",
   };
 

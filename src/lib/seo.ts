@@ -12,7 +12,7 @@ type SeoInput = {
 };
 
 export function createMetadata(input: SeoInput): Metadata {
-  const siteName = input.settings?.siteName || "CreatorTools.in";
+  const siteName = input.settings?.siteName || "CreatorTool.in";
   const title = input.title || input.settings?.globalTitle || `${siteName} - Free Creator Tools`;
   const description =
     input.description ||

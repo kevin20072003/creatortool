@@ -9,7 +9,7 @@ export function Footer({ settings }: { settings: SettingMap }) {
         <div>
           <div className="mb-3 flex items-center gap-2 font-black">
             <span className="grid size-9 place-items-center rounded-lg bg-[var(--primary)] text-sm text-white">CT</span>
-            {setting(settings, "siteName", "CreatorTools.in")}
+            {setting(settings, "siteName", "CreatorTool.in")}
           </div>
           <p className="muted max-w-sm text-sm">{setting(settings, "footerText", "Free creator tools for video creators.")}</p>
         </div>
@@ -42,7 +42,7 @@ export function Footer({ settings }: { settings: SettingMap }) {
         </div>
       </div>
       <div className="border-t border-[var(--border)] py-4 text-center text-sm muted">
-        © {new Date().getFullYear()} CreatorTools.in. Built for fast creator workflows.
+        © {new Date().getFullYear()} CreatorTool.in. Built for fast creator workflows.
       </div>
     </footer>
   );

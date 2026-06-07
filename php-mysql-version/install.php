@@ -10,7 +10,7 @@ function install_error_page(string $title, string $message, string $detail = '')
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>CreatorTools Install Error</title>
+  <title>CreatorTool Install Error</title>
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
@@ -40,7 +40,7 @@ set_exception_handler(function (Throwable $e): void {
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/functions.php';
 
-if (DB_NAME === 'creatortools_db' || DB_USER === 'creatortools_user' || DB_PASS === 'change-this-password') {
+if (DB_NAME === 'CreatorTool_db' || DB_USER === 'CreatorTool_user' || DB_PASS === 'change-this-password') {
     install_error_page(
         'Database config is still default',
         'Open includes/config.php in Hostinger File Manager and replace the sample database values with your real Hostinger MySQL details.'
@@ -164,7 +164,7 @@ foreach ($tools as $i => $tool) {
         'status' => 'published',
         'featured' => $tool[5],
         'popular' => $tool[6],
-        'seo_title' => $tool[0] . ' - CreatorTools.in',
+        'seo_title' => $tool[0] . ' - CreatorTool.in',
         'seo_description' => $tool[4],
         'sort_order' => $i,
     ], 'slug');
@@ -187,25 +187,25 @@ foreach ($posts as $title) {
         'title' => $title,
         'slug' => slugify($title),
         'excerpt' => $title . ' with practical examples for creators.',
-        'content' => "# $title\n\nThis guide explains the basics in simple creator-friendly language.\n\n## Practical tip\nUse CreatorTools.in calculators before recording, editing, streaming, or uploading.",
+        'content' => "# $title\n\nThis guide explains the basics in simple creator-friendly language.\n\n## Practical tip\nUse CreatorTool.in calculators before recording, editing, streaming, or uploading.",
         'status' => 'published',
-        'seo_title' => $title . ' - CreatorTools.in',
+        'seo_title' => $title . ' - CreatorTool.in',
         'seo_description' => $title . ' explained for creators.',
     ], 'slug');
 }
 
 $pages = [
-    ['About', 'about', '# About CreatorTools.in\n\nCreatorTools.in provides simple tools for creators, editors, streamers, and videographers.'],
+    ['About', 'about', '# About CreatorTool.in\n\nCreatorTool.in provides simple tools for creators, editors, streamers, and videographers.'],
     ['Contact', 'contact', '# Contact\n\nUpdate this page from admin.'],
     ['Privacy Policy', 'privacy-policy', '# Privacy Policy\n\nThis site stores basic analytics and admin content in MySQL.'],
     ['Terms and Conditions', 'terms-and-conditions', '# Terms and Conditions\n\nUse these tools for estimates and educational planning.'],
     ['Disclaimer', 'disclaimer', '# Disclaimer\n\nCalculator results are approximate and may vary.'],
 ];
-foreach ($pages as $p) upsert('pages', ['title' => $p[0], 'slug' => $p[1], 'content' => $p[2], 'seo_title' => $p[0] . ' - CreatorTools.in'], 'slug');
+foreach ($pages as $p) upsert('pages', ['title' => $p[0], 'slug' => $p[1], 'content' => $p[2], 'seo_title' => $p[0] . ' - CreatorTool.in'], 'slug');
 
 foreach ([
-    'site_name' => 'CreatorTools.in',
-    'homeHeroTitle' => 'CreatorTools.in',
+    'site_name' => 'CreatorTool.in',
+    'homeHeroTitle' => 'CreatorTool.in',
     'homeHeroSubtitle' => 'Fast tools for YouTubers, editors, videographers, streamers, and content creators.',
     'global_meta_description' => 'Free calculators and generators for YouTubers, editors, videographers, streamers, and content creators.',
     'footer_text' => 'Free creator tools for YouTubers, editors, videographers, and streamers.',
@@ -225,5 +225,5 @@ foreach (['header', 'in-content', 'sidebar', 'footer'] as $slot) upsert('ad_slot
 
 ?>
 <!doctype html>
-<html><head><meta charset="utf-8"><title>CreatorTools Install</title><link rel="stylesheet" href="/assets/css/style.css"></head>
+<html><head><meta charset="utf-8"><title>CreatorTool Install</title><link rel="stylesheet" href="/assets/css/style.css"></head>
 <body><main class="container section"><div class="card"><h1>Install complete</h1><p>MySQL tables and seed data are ready.</p><p><a class="btn-primary" href="/">Open website</a> <a class="btn-secondary" href="/admin/login.php">Admin login</a></p><p class="muted">Delete or rename <code>install.php</code> after setup.</p></div></main></body></html>
