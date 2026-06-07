@@ -36,13 +36,21 @@ define('ADMIN_PASSWORD', 'your-strong-password');
 https://creatortools.in/install.php
 ```
 
+If install does not open, run this check page:
+
+```text
+https://creatortools.in/db-check.php
+```
+
+It will show whether MySQL credentials are correct.
+
 9. After install completes, login here:
 
 ```text
 https://creatortools.in/admin/login.php
 ```
 
-10. Delete or rename `install.php` after setup.
+10. Delete or rename `install.php` and `db-check.php` after setup.
 
 ## Admin Features
 

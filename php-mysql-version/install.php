@@ -1,8 +1,57 @@
 <?php
+ini_set('display_errors', '1');
+error_reporting(E_ALL);
+
+function install_error_page(string $title, string $message, string $detail = ''): void {
+    http_response_code(500);
+    ?>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CreatorTools Install Error</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <main class="container section">
+    <div class="card">
+      <p class="eyebrow">Install error</p>
+      <h1><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?></h1>
+      <p><?= htmlspecialchars($message, ENT_QUOTES, 'UTF-8') ?></p>
+      <?php if ($detail): ?><pre class="alert"><?= htmlspecialchars($detail, ENT_QUOTES, 'UTF-8') ?></pre><?php endif; ?>
+      <h2>Quick checks</h2>
+      <p class="muted">1. Edit <code>includes/config.php</code> with the exact Hostinger MySQL database name, username, and password.</p>
+      <p class="muted">2. Make sure the files inside <code>php-mysql-version</code> are uploaded directly into <code>public_html</code>.</p>
+      <p class="muted">3. Set Hostinger PHP version to PHP 8.1 or newer.</p>
+      <p><a class="btn-secondary" href="/db-check.php">Run DB check</a></p>
+    </div>
+  </main>
+</body>
+</html>
+<?php
+    exit;
+}
+
+set_exception_handler(function (Throwable $e): void {
+    install_error_page('Installation failed', 'The installer stopped because the server returned an error.', $e->getMessage());
+});
+
 require_once __DIR__ . '/includes/db.php';
 require_once __DIR__ . '/includes/functions.php';
 
-$pdo = db();
+if (DB_NAME === 'creatortools_db' || DB_USER === 'creatortools_user' || DB_PASS === 'change-this-password') {
+    install_error_page(
+        'Database config is still default',
+        'Open includes/config.php in Hostinger File Manager and replace the sample database values with your real Hostinger MySQL details.'
+    );
+}
+
+try {
+    $pdo = db();
+} catch (Throwable $e) {
+    install_error_page('Database connection failed', 'The installer could not connect to MySQL. Check DB_HOST, DB_NAME, DB_USER, and DB_PASS in includes/config.php.', $e->getMessage());
+}
 
 $schema = [
     "CREATE TABLE IF NOT EXISTS users (id INT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(190) UNIQUE NOT NULL, name VARCHAR(190), password_hash VARCHAR(255) NOT NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP)",
