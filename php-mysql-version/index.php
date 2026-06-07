@@ -54,6 +54,8 @@ render_header('Free Tools for Creators');
     </div>
   </section>
 
+  <div class="container"><?php ad_slot('between-sections'); ?></div>
+
   <section class="container section">
     <div class="section-head">
       <div>
@@ -73,6 +75,8 @@ render_header('Free Tools for Creators');
       <?php endforeach; ?>
     </div>
   </section>
+
+  <div class="container"><?php ad_slot('tools-list'); ?></div>
 
   <section class="container section">
     <div class="section-head">

@@ -10,6 +10,7 @@ $permissionOptions = [
     'blog' => 'Write and publish blog posts',
     'pages' => 'Edit pages',
     'media' => 'Upload media',
+    'analytics' => 'View analytics',
     'settings' => 'Edit settings and ads',
     'users' => 'Manage users and permissions',
 ];

@@ -47,6 +47,7 @@ render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $
           <div class="result-box"><p>Storage</p><strong data-summary></strong></div>
           <div class="result-box"><p>Scan</p><strong data-summary></strong></div>
         </div>
+        <?php ad_slot('after-tool'); ?>
       </div>
       <aside class="card result-panel">
         <p class="eyebrow">Result summary</p>

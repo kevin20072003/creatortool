@@ -11,8 +11,9 @@ function admin_header(string $title): void {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
   <title><?= e($title) ?> - Admin</title>
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260607-dark-analytics">
 </head>
 <body>
   <header class="site-header">
@@ -26,6 +27,7 @@ function admin_header(string $title): void {
         <?php if (can('blog')): ?><a href="/admin/blog.php">Blog</a><?php endif; ?>
         <?php if (can('pages')): ?><a href="/admin/pages.php">Pages</a><?php endif; ?>
         <?php if (can('media')): ?><a href="/admin/media.php">Media</a><?php endif; ?>
+        <?php if (can('analytics')): ?><a href="/admin/analytics.php">Analytics</a><?php endif; ?>
         <?php if (can('settings')): ?><a href="/admin/settings.php">Settings</a><?php endif; ?>
         <?php if (can('users')): ?><a href="/admin/users.php">Users</a><?php endif; ?>
         <a href="/admin/logout.php">Logout</a>

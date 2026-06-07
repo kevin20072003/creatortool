@@ -12,6 +12,7 @@ function render_header(string $title = '', string $description = ''): void {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
   <title><?= e(page_title($title)) ?></title>
   <meta name="description" content="<?= e($desc) ?>">
   <link rel="canonical" href="<?= e(SITE_URL . ($_SERVER['REQUEST_URI'] ?? '/')) ?>">
@@ -19,7 +20,7 @@ function render_header(string $title = '', string $description = ''): void {
   <meta property="og:description" content="<?= e($desc) ?>">
   <meta name="twitter:card" content="summary_large_image">
   <?php if ($favicon): ?><link rel="icon" href="<?= e($favicon) ?>"><?php endif; ?>
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260607-dark-analytics">
   <?php if (setting('search_console_code')): ?><?= setting('search_console_code') ?><?php endif; ?>
   <?php if (setting('google_analytics_code')): ?><?= setting('google_analytics_code') ?><?php endif; ?>
   <?php if (setting('custom_head_code')): ?><?= setting('custom_head_code') ?><?php endif; ?>
