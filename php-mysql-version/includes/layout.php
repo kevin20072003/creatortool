@@ -47,11 +47,16 @@ function render_header(string $title = '', string $description = ''): void {
 function render_footer(): void {
     $siteName = setting('site_name', SITE_NAME);
     $logo = setting('site_logo', '');
+    $footerImage = setting('footer_image', '');
     ?>
   <footer class="footer">
     <div class="container footer-grid">
       <div>
-        <a class="brand" href="/"><?php if ($logo): ?><img src="<?= e($logo) ?>" alt="<?= e($siteName) ?>"><?php else: ?><span>CT</span><?php endif; ?><?= e($siteName) ?></a>
+        <?php if ($footerImage): ?>
+          <a class="footer-image-link" href="/"><img class="footer-image" src="<?= e($footerImage) ?>" alt="<?= e($siteName) ?>"></a>
+        <?php else: ?>
+          <a class="brand" href="/"><?php if ($logo): ?><img src="<?= e($logo) ?>" alt="<?= e($siteName) ?>"><?php else: ?><span>CT</span><?php endif; ?><?= e($siteName) ?></a>
+        <?php endif; ?>
         <p><?= e(setting('footer_text', 'Free creator tools for YouTubers, editors, videographers, and streamers.')) ?></p>
         <p class="social-links">
           <?php if (setting('youtube_url')): ?><a href="<?= e(setting('youtube_url')) ?>">YouTube</a><?php endif; ?>

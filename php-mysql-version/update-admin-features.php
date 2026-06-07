@@ -28,6 +28,7 @@ try {
         'footer_text' => 'Free creator tools for YouTubers, editors, videographers, and streamers.',
         'site_logo' => '',
         'site_favicon' => '',
+        'footer_image' => '',
         'youtube_url' => '',
         'instagram_url' => '',
         'x_url' => '',

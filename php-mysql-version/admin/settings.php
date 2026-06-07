@@ -29,14 +29,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if (!empty($_POST['remove_logo'])) {
         q('INSERT INTO settings (name, value) VALUES ("site_logo", "") ON DUPLICATE KEY UPDATE value = VALUES(value)');
-    }
-    if (!empty($_POST['remove_favicon'])) {
         q('INSERT INTO settings (name, value) VALUES ("site_favicon", "") ON DUPLICATE KEY UPDATE value = VALUES(value)');
     }
+    if (!empty($_POST['remove_footer_image'])) {
+        q('INSERT INTO settings (name, value) VALUES ("footer_image", "") ON DUPLICATE KEY UPDATE value = VALUES(value)');
+    }
     $logo = upload_admin_image('site_logo_file');
-    if ($logo) q('INSERT INTO settings (name, value) VALUES ("site_logo", ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$logo]);
-    $favicon = upload_admin_image('site_favicon_file');
-    if ($favicon) q('INSERT INTO settings (name, value) VALUES ("site_favicon", ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$favicon]);
+    if ($logo) {
+        q('INSERT INTO settings (name, value) VALUES ("site_logo", ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$logo]);
+        q('INSERT INTO settings (name, value) VALUES ("site_favicon", ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$logo]);
+    }
+    $footerImage = upload_admin_image('footer_image_file');
+    if ($footerImage) q('INSERT INTO settings (name, value) VALUES ("footer_image", ?) ON DUPLICATE KEY UPDATE value = VALUES(value)', [$footerImage]);
     $slotEnabled = $_POST['ad_enabled'] ?? [];
     foreach ($_POST['ads'] ?? [] as $name => $code) {
         q('INSERT INTO ad_slots (name, code, enabled) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE code = VALUES(code), enabled = VALUES(enabled)', [$name, trim($code), isset($slotEnabled[$name]) ? 1 : 0]);
@@ -46,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $ads = q('SELECT * FROM ad_slots ORDER BY name')->fetchAll();
 $currentLogo = setting('site_logo');
-$currentFavicon = setting('site_favicon');
+$currentFooterImage = setting('footer_image');
 ?>
 <main class="container section">
   <p class="eyebrow">Settings</p>
@@ -56,14 +60,16 @@ $currentFavicon = setting('site_favicon');
     <h2>Brand</h2>
     <div class="grid-auto brand-upload-grid">
       <div class="upload-card">
-        <div class="upload-preview"><?php if ($currentLogo): ?><img src="<?= e($currentLogo) ?>" alt="Current logo"><?php else: ?><span>CT</span><?php endif; ?></div>
-        <label class="label">Upload logo file<input class="input file-input" type="file" name="site_logo_file" accept="image/*"></label>
-        <label class="check-row"><input type="checkbox" name="remove_logo"> Remove current logo</label>
+        <div class="upload-preview transparent"><?php if ($currentLogo): ?><img src="<?= e($currentLogo) ?>" alt="Current logo and favicon"><?php else: ?><span>CT</span><?php endif; ?></div>
+        <label class="label">Upload logo + favicon image<input class="input file-input" type="file" name="site_logo_file" accept="image/png,image/webp,image/jpeg,image/gif,image/x-icon"></label>
+        <p class="muted">Use one PNG/WebP image for both header logo and browser favicon. Transparent PNG is supported.</p>
+        <label class="check-row"><input type="checkbox" name="remove_logo"> Remove logo and favicon</label>
       </div>
       <div class="upload-card">
-        <div class="upload-preview small"><?php if ($currentFavicon): ?><img src="<?= e($currentFavicon) ?>" alt="Current favicon"><?php else: ?><span>ICO</span><?php endif; ?></div>
-        <label class="label">Upload favicon file<input class="input file-input" type="file" name="site_favicon_file" accept="image/*,.ico"></label>
-        <label class="check-row"><input type="checkbox" name="remove_favicon"> Remove current favicon</label>
+        <div class="upload-preview footer-preview"><?php if ($currentFooterImage): ?><img src="<?= e($currentFooterImage) ?>" alt="Current footer image"><?php else: ?><span>1024 x 320 footer PNG</span><?php endif; ?></div>
+        <label class="label">Upload footer image<input class="input file-input" type="file" name="footer_image_file" accept="image/png,image/webp,image/jpeg"></label>
+        <p class="muted">Recommended size: 1024 x 320 PNG. No background will be added by the site.</p>
+        <label class="check-row"><input type="checkbox" name="remove_footer_image"> Remove footer image</label>
       </div>
     </div>
 
