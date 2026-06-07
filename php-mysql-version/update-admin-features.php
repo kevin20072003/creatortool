@@ -4,7 +4,15 @@ error_reporting(E_ALL);
 require_once __DIR__ . '/includes/auth.php';
 
 try {
-    ensure_admin_schema();
+    foreach ([
+        "ALTER TABLE users ADD COLUMN role VARCHAR(50) DEFAULT 'admin'",
+        "ALTER TABLE users ADD COLUMN permissions TEXT NULL",
+        "ALTER TABLE users ADD COLUMN status VARCHAR(30) DEFAULT 'active'",
+    ] as $sql) {
+        try { q($sql); } catch (Throwable $e) {}
+    }
+    try { q("UPDATE users SET role = 'admin' WHERE role IS NULL OR role = ''"); } catch (Throwable $e) {}
+
     $settings = [
         'site_name' => 'CreatorTool.in',
         'homeHeroTitle' => 'CreatorTool.in',
