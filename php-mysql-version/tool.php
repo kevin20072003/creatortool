@@ -13,6 +13,18 @@ track_event('page_view', '/tool.php?slug=' . $slug, $slug);
 render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $tool['description']);
 ?>
 <main class="container section">
+  <script type="application/ld+json">
+  <?= json_encode([
+      '@context' => 'https://schema.org',
+      '@type' => 'SoftwareApplication',
+      'name' => $tool['name'],
+      'applicationCategory' => 'CreatorTool',
+      'operatingSystem' => 'Web',
+      'description' => $tool['description'],
+      'url' => rtrim(SITE_URL, '/') . '/tool.php?slug=' . $tool['slug'],
+      'offers' => ['@type' => 'Offer', 'price' => '0', 'priceCurrency' => 'USD'],
+  ], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>
+  </script>
   <p class="muted"><a href="/">Home</a> / <a href="/tools.php">Tools</a> / <a href="/category.php?slug=<?= e($tool['category_slug']) ?>"><?= e($tool['category']) ?></a></p>
   <h1><?= e($tool['name']) ?></h1>
   <p class="lead"><?= e($tool['description']) ?></p>

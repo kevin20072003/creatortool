@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/_helpers.php';
+require_permission('pages');
 admin_header('Pages');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     q('UPDATE pages SET title=?, content=?, seo_title=?, seo_description=? WHERE id=?', [post_value('title'), post_value('content'), post_value('seo_title'), post_value('seo_description'), (int)$_POST['id']]);

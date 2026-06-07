@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/_helpers.php';
+require_permission('tools');
 admin_header('Tools');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

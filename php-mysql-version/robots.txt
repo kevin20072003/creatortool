@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://creatortools.in/sitemap.php
+Sitemap: https://creatortools.in/sitemap.xml

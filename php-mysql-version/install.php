@@ -203,7 +203,24 @@ $pages = [
 ];
 foreach ($pages as $p) upsert('pages', ['title' => $p[0], 'slug' => $p[1], 'content' => $p[2], 'seo_title' => $p[0] . ' - CreatorTools.in'], 'slug');
 
-upsert('settings', ['name' => 'footer_text', 'value' => 'Free creator tools for YouTubers, editors, videographers, and streamers.'], 'name');
+foreach ([
+    'site_name' => 'CreatorTools.in',
+    'homeHeroTitle' => 'CreatorTools.in',
+    'homeHeroSubtitle' => 'Fast tools for YouTubers, editors, videographers, streamers, and content creators.',
+    'global_meta_description' => 'Free calculators and generators for YouTubers, editors, videographers, streamers, and content creators.',
+    'footer_text' => 'Free creator tools for YouTubers, editors, videographers, and streamers.',
+    'site_logo' => '',
+    'site_favicon' => '',
+    'youtube_url' => '',
+    'instagram_url' => '',
+    'x_url' => '',
+    'google_analytics_code' => '',
+    'search_console_code' => '',
+    'custom_head_code' => '',
+    'maintenance_message' => '',
+] as $name => $value) {
+    upsert('settings', ['name' => $name, 'value' => $value], 'name');
+}
 foreach (['header', 'in-content', 'sidebar', 'footer'] as $slot) upsert('ad_slots', ['name' => $slot, 'code' => '', 'enabled' => 1], 'name');
 
 ?>

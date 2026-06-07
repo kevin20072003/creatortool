@@ -33,7 +33,8 @@ function markdown(string $text): string {
 }
 
 function page_title(string $title = ''): string {
-    return $title ? $title . ' - ' . SITE_NAME : SITE_NAME . ' - Free Creator Tools';
+    $siteName = setting('site_name', SITE_NAME);
+    return $title ? $title . ' - ' . $siteName : $siteName . ' - Free Creator Tools';
 }
 
 function track_event(string $type, string $path, ?string $slug = null): void {

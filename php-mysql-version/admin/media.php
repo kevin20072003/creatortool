@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/_helpers.php';
+require_permission('media');
 admin_header('Media');
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['image'])) {

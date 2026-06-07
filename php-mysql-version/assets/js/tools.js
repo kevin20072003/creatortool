@@ -37,7 +37,6 @@ const interlaceFactor = {
 
 document.addEventListener("click", (event) => {
   if (event.target.matches("[data-menu]")) $("[data-nav]")?.classList.toggle("open");
-  if (event.target.matches("[data-theme]")) document.documentElement.classList.toggle("dark");
   if (event.target.matches("[data-copy]")) navigator.clipboard?.writeText($("[data-result]")?.innerText || "");
   if (event.target.matches("[data-reset]")) location.reload();
   if (event.target.matches("[data-example]")) loadExample();
