@@ -6,6 +6,12 @@ function render_header(string $title = '', string $description = ''): void {
     $siteName = setting('site_name', SITE_NAME);
     $logo = setting('site_logo', '');
     $favicon = setting('site_favicon', '');
+    $path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+    $isAiPrompt = strpos($path, '/categories/ai-prompt-tools') === 0 || strpos($path, '/tools/ai-') === 0 || strpos($path, '/tools/image-to-prompt') === 0 || strpos($path, '/tools/prompt-') === 0 || strpos($path, '/tools/text-to-image') === 0 || strpos($path, '/tools/product-photo-prompt') === 0 || strpos($path, '/tools/youtube-thumbnail-prompt') === 0 || strpos($path, '/tools/logo-prompt') === 0 || strpos($path, '/tools/character-prompt') === 0 || strpos($path, '/tools/interior-design-prompt') === 0 || strpos($path, '/tools/social-media-post-prompt') === 0;
+    $isTools = !$isAiPrompt && ($path === '/tools' || strpos($path, '/tools/') === 0 || strpos($path, '/categories/') === 0);
+    $isBlog = $path === '/blog' || strpos($path, '/blog/') === 0;
+    $isAbout = $path === '/pages/about';
+    $isContact = $path === '/pages/contact';
     ?>
 <!doctype html>
 <html lang="en">
@@ -32,11 +38,11 @@ function render_header(string $title = '', string $description = ''): void {
       <a class="brand" href="/"><?php if ($logo): ?><img src="<?= e($logo) ?>" alt="<?= e($siteName) ?>"><?php else: ?><span>CT</span><?php endif; ?><?= e($siteName) ?></a>
       <button class="menu-btn" type="button" data-menu onclick="document.querySelector('[data-nav]')?.classList.toggle('open'); return false;">Menu</button>
       <nav class="nav-links" data-nav>
-        <a href="/categories/ai-prompt-tools">AI Prompt Tools</a>
-        <a href="/tools">Tools</a>
-        <a href="/blog">Blog</a>
-        <a href="/pages/about">About</a>
-        <a href="/pages/contact">Contact</a>
+        <a class="<?= $isAiPrompt ? 'active' : '' ?>" href="/categories/ai-prompt-tools">AI Prompt Tools</a>
+        <a class="<?= $isTools ? 'active' : '' ?>" href="/tools">Tools</a>
+        <a class="<?= $isBlog ? 'active' : '' ?>" href="/blog">Blog</a>
+        <a class="<?= $isAbout ? 'active' : '' ?>" href="/pages/about">About</a>
+        <a class="<?= $isContact ? 'active' : '' ?>" href="/pages/contact">Contact</a>
       </nav>
     </div>
   </header>

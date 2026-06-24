@@ -135,7 +135,7 @@ body{background:
 .site-header{background:rgba(7,12,23,.9);border-bottom-color:rgba(94,234,212,.18)}
 .nav{min-height:74px}
 .nav-links a{border:1px solid transparent;border-radius:8px;padding:9px 10px}
-.nav-links a:first-child{color:var(--accent);border-color:rgba(94,234,212,.22);background:rgba(94,234,212,.08)}
+.nav-links a.active{color:var(--accent);border-color:rgba(94,234,212,.22);background:rgba(94,234,212,.08)}
 .hero{background:
   linear-gradient(135deg,rgba(45,212,191,.14),transparent 32%),
   linear-gradient(180deg,#0d1729 0%,#080d1a 100%);
