@@ -43,6 +43,10 @@ document.addEventListener("click", (event) => {
 });
 
 document.addEventListener("input", () => runTool());
+document.addEventListener("change", (event) => {
+  if (event.target.matches('[name="reference_image"]')) previewReferenceImage(event.target);
+  runTool();
+});
 document.addEventListener("DOMContentLoaded", () => runTool());
 
 function num(name) {
@@ -132,6 +136,9 @@ function runTool() {
     "line-break": lineBreakOutput,
     "upload-time": uploadTimeOutput,
     "export-helper": exportHelperOutput,
+    "ai-image-prompt": aiImagePromptOutput,
+    "image-to-prompt": imageToPromptOutput,
+    "prompt-improver": promptImproverOutput,
   };
   const result = (handlers[type] || storageOutput)();
   writeResult(result.text, result.summary);
@@ -356,6 +363,99 @@ ${professionalWarning(s.format)}`;
   return { text, summary: [s.format.label, "MP4", target, s.format.scan] };
 }
 
+function promptInputs() {
+  const idea = (val("prompt_idea") || val("keyword") || "A premium creator workspace").trim();
+  return {
+    idea,
+    model: val("prompt_model") || "ChatGPT / Gemini",
+    style: val("prompt_style") || "Cinematic realistic",
+    theme: val("prompt_theme") || "Modern premium",
+    lighting: val("prompt_lighting") || "Soft cinematic lighting",
+    composition: val("prompt_composition") || "Centered composition",
+    ratio: val("prompt_ratio") || "16:9 YouTube / landscape",
+    negative: (val("negative_prompt") || "blurry, low quality, watermark, distorted text").trim(),
+  };
+}
+
+function buildImagePrompt(p, sourceLabel = "Prompt") {
+  const main = `${p.idea}. ${p.style} style, ${p.theme} mood, ${p.lighting}, ${p.composition}, high detail, clean professional visual, strong subject clarity, balanced colors, sharp focus, polished creator-friendly finish.`;
+  const modelNote = p.model.includes("Midjourney")
+    ? `Midjourney format:\n/imagine prompt: ${main} --ar ${ratioValue(p.ratio)} --style raw`
+    : p.model.includes("Stable")
+      ? `Stable Diffusion / SDXL format:\nPositive prompt: ${main}\nNegative prompt: ${p.negative}`
+      : `ChatGPT / Gemini format:\nCreate an image of ${main}\nUse aspect ratio ${p.ratio}. Avoid: ${p.negative}.`;
+  return `${sourceLabel}
+
+Main prompt:
+${main}
+
+Negative prompt:
+${p.negative}
+
+Recommended aspect ratio:
+${p.ratio}
+
+${modelNote}
+
+Prompt tips:
+1. Add brand colors if you need a consistent look.
+2. Add camera/lens words only when you want a photo-real result.
+3. For readable text, ask the AI to leave blank space and add final text manually in an editor.`;
+}
+
+function aiImagePromptOutput() {
+  const p = promptInputs();
+  return {
+    text: buildImagePrompt(p, "AI image prompt generator"),
+    summary: [p.model, p.style, p.ratio, "Prompt ready"],
+  };
+}
+
+function imageToPromptOutput() {
+  const p = promptInputs();
+  const text = `${buildImagePrompt(p, "Image-to-prompt helper")}
+
+Reference image note:
+This browser tool previews your image locally, but it does not analyze pixels with AI. For the best result, describe the visible subject, colors, background, angle, and mood in the text box, then paste the generated prompt into Gemini, ChatGPT, Midjourney, or another image model.`;
+  return { text, summary: [p.model, "Reference prompt", p.ratio, "Local preview"] };
+}
+
+function promptImproverOutput() {
+  const p = promptInputs();
+  const improved = `${p.idea}. Improve this into a clear image-generation prompt with a specific subject, visual style, lighting, composition, background, mood, color palette, camera angle, quality details, and aspect ratio. Output one final prompt and one negative prompt.`;
+  const text = `Improved prompt instruction:
+${improved}
+
+Polished image prompt:
+${buildImagePrompt(p, "Final prompt")}
+
+Use this when:
+- Your prompt is too short.
+- The AI output looks random.
+- You want a cleaner style, theme, and composition.`;
+  return { text, summary: [p.model, "Improved", p.ratio, "Prompt ready"] };
+}
+
+function ratioValue(label) {
+  if (label.includes("9:16")) return "9:16";
+  if (label.includes("1:1")) return "1:1";
+  if (label.includes("4:5")) return "4:5";
+  if (label.includes("3:2")) return "3:2";
+  if (label.includes("21:9")) return "21:9";
+  return "16:9";
+}
+
+function previewReferenceImage(input) {
+  const preview = $("[data-image-preview]");
+  const file = input.files?.[0];
+  if (!preview || !file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    preview.innerHTML = `<img src="${reader.result}" alt="Reference preview"><span>Reference preview only. Add image details in the text box for accurate prompt output.</span>`;
+  };
+  reader.readAsDataURL(file);
+}
+
 function slugTag(text) {
   return text.replace(/[^a-z0-9 ]/gi, " ").trim().split(/\s+/).map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()).join("");
 }
@@ -384,6 +484,18 @@ function wrapText(text, max) {
 }
 
 function loadExample() {
+  const promptIdea = $('[name="prompt_idea"]');
+  if (promptIdea) {
+    promptIdea.value = "A premium AI creator dashboard on a dark desk, glowing prompt cards, camera gear, clean SaaS interface, made for YouTubers and designers";
+    const style = $('[name="prompt_style"]');
+    if (style) style.value = "Cinematic realistic";
+    const theme = $('[name="prompt_theme"]');
+    if (theme) theme.value = "Dark futuristic";
+    const ratio = $('[name="prompt_ratio"]');
+    if (ratio) ratio.value = "16:9 YouTube / landscape";
+    runTool();
+    return;
+  }
   const format = $('[name="format"]');
   if (format) format.value = "1080i50";
   const codec = $('[name="codec"]');

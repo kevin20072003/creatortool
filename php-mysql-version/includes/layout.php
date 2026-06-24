@@ -20,7 +20,7 @@ function render_header(string $title = '', string $description = ''): void {
   <meta property="og:description" content="<?= e($desc) ?>">
   <meta name="twitter:card" content="summary_large_image">
   <?php if ($favicon): ?><link rel="icon" href="<?= e($favicon) ?>"><?php endif; ?>
-  <link rel="stylesheet" href="/assets/css/style.css?v=20260607-dark-analytics">
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260624-ai-prompts">
   <?php if (setting('search_console_code')): ?><?= setting('search_console_code') ?><?php endif; ?>
   <?php if (setting('google_analytics_code')): ?><?= setting('google_analytics_code') ?><?php endif; ?>
   <?php if (setting('custom_head_code')): ?><?= setting('custom_head_code') ?><?php endif; ?>
@@ -64,7 +64,7 @@ function render_footer(): void {
           <?php if (setting('x_url')): ?><a href="<?= e(setting('x_url')) ?>">X</a><?php endif; ?>
         </p>
       </div>
-      <div><h3>Tools</h3><a href="/tools">All Tools</a><a href="/categories/youtube-tools">YouTube Tools</a><a href="/categories/video-calculators">Video Calculators</a></div>
+      <div><h3>Tools</h3><a href="/tools">All Tools</a><a href="/categories/ai-prompt-tools">AI Prompt Tools</a><a href="/categories/youtube-tools">YouTube Tools</a><a href="/categories/video-calculators">Video Calculators</a></div>
       <div><h3>Pages</h3><a href="/blog">Blog</a><a href="/pages/privacy-policy">Privacy</a><a href="/pages/terms-and-conditions">Terms</a></div>
       <div><h3>Admin</h3><a href="/admin/login.php">Login</a><a href="/sitemap.php">Sitemap</a></div>
     </div>

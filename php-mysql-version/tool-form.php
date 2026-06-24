@@ -63,6 +63,25 @@ This is the next subtitle line.</textarea></label>
 <?php elseif ($template === 'export-helper'): ?>
   <?php video_format_fields(false, false); ?>
   <label class="label">Delivery platform<select class="select" name="niche"><option>YouTube</option><option>Instagram Reels</option><option>TikTok</option><option>Client delivery</option></select></label>
+<?php elseif (in_array($template, ['ai-image-prompt', 'image-to-prompt', 'prompt-improver'], true)): ?>
+  <?php if ($template === 'image-to-prompt'): ?>
+    <label class="label wide">Reference image<input class="input file-input" type="file" name="reference_image" accept="image/png,image/jpeg,image/webp"></label>
+    <div class="image-reference-preview wide" data-image-preview>
+      <span>Upload a reference image to preview it here. Describe the important details below for a better prompt.</span>
+    </div>
+    <label class="label wide">What is in the image?<textarea class="textarea" name="prompt_idea">A creator desk setup with camera, soft light, laptop, and clean modern background.</textarea></label>
+  <?php elseif ($template === 'prompt-improver'): ?>
+    <label class="label wide">Rough prompt or idea<textarea class="textarea" name="prompt_idea">A cinematic product photo of wireless earbuds on a desk.</textarea></label>
+  <?php else: ?>
+    <label class="label wide">Image idea / subject<textarea class="textarea" name="prompt_idea">A futuristic creator studio with a camera, editing timeline, glowing screens, and premium dark workspace.</textarea></label>
+  <?php endif; ?>
+  <label class="label">AI tool<select class="select" name="prompt_model"><option>ChatGPT / Gemini</option><option>Midjourney</option><option>Stable Diffusion / SDXL</option><option>Leonardo AI</option><option>Canva AI</option></select></label>
+  <label class="label">Style<select class="select" name="prompt_style"><option>Cinematic realistic</option><option>Premium product photo</option><option>Anime illustration</option><option>3D render</option><option>Minimal editorial</option><option>Photoreal portrait</option><option>Fantasy concept art</option><option>Clean vector logo</option></select></label>
+  <label class="label">Theme / mood<select class="select" name="prompt_theme"><option>Modern premium</option><option>Dark futuristic</option><option>Bright friendly</option><option>Luxury brand</option><option>Cyberpunk neon</option><option>Natural lifestyle</option><option>Indian festive</option><option>Professional SaaS</option></select></label>
+  <label class="label">Lighting<select class="select" name="prompt_lighting"><option>Soft cinematic lighting</option><option>Natural window light</option><option>Dramatic rim light</option><option>Studio softbox lighting</option><option>Golden hour</option><option>Neon glow</option></select></label>
+  <label class="label">Composition<select class="select" name="prompt_composition"><option>Centered composition</option><option>Close-up hero shot</option><option>Wide establishing shot</option><option>Rule of thirds</option><option>Top-down flat lay</option><option>Clean negative space for text</option></select></label>
+  <label class="label">Aspect ratio<select class="select" name="prompt_ratio"><option>16:9 YouTube / landscape</option><option>9:16 Shorts / Reels</option><option>1:1 square</option><option>4:5 Instagram portrait</option><option>3:2 photo</option><option>21:9 cinematic</option></select></label>
+  <label class="label wide">Negative prompt / avoid<textarea class="textarea" name="negative_prompt">blurry, low quality, distorted hands, extra fingers, bad text, watermark, logo, oversaturated, messy background</textarea></label>
 <?php else: ?>
   <label class="label">Keyword / topic<input class="input" name="keyword" value="4K video storage"></label>
   <label class="label">Niche / platform<input class="input" name="niche" value="YouTube creators"></label>

@@ -78,6 +78,7 @@ function upsert(string $table, array $data, string $unique): void {
 }
 
 $categories = [
+    ['AI Prompt Tools', 'ai-prompt-tools', 'Prompt generators for AI images, thumbnails, products, logos, characters, social media, ChatGPT, Gemini, Midjourney, and SDXL.', 'AI'],
     ['YouTube Tools', 'youtube-tools', 'Tools for YouTube titles, descriptions, tags, ideas, and upload workflows.', 'YT'],
     ['Video Calculators', 'video-calculators', 'Storage, bitrate, upload, export, and recording calculators.', 'VC'],
     ['Thumbnail Tools', 'thumbnail-tools', 'Thumbnail copy, color, size, and safe area helpers.', 'TH'],
@@ -95,6 +96,16 @@ foreach ($categories as $i => $cat) {
 }
 
 $tools = [
+    ['AI Image Prompt Generator', 'ai-image-prompt-generator', 'ai-prompt-tools', 'ai-image-prompt', 'Turn a rough idea into a polished AI image prompt for ChatGPT, Gemini, Midjourney, SDXL, Leonardo AI, and Canva AI.', 1, 1],
+    ['Image-to-Prompt Helper', 'image-to-prompt-helper', 'ai-prompt-tools', 'image-to-prompt', 'Upload a reference image preview, describe what you see, and generate a clean prompt for recreating a similar style.', 1, 1],
+    ['Text-to-Image Prompt Generator', 'text-to-image-prompt-generator', 'ai-prompt-tools', 'ai-image-prompt', 'Convert a simple text idea into a detailed image generation prompt with style, mood, lighting, and composition.', 1, 1],
+    ['Prompt Improver', 'prompt-improver', 'ai-prompt-tools', 'prompt-improver', 'Rewrite a short or weak AI prompt into a clearer prompt with structure, details, and negative prompt guidance.', 1, 1],
+    ['Product Photo Prompt Generator', 'product-photo-prompt-generator', 'ai-prompt-tools', 'ai-image-prompt', 'Generate premium product photography prompts for ecommerce, ads, social posts, and creator portfolios.', 0, 1],
+    ['YouTube Thumbnail Prompt Generator', 'youtube-thumbnail-prompt-generator', 'ai-prompt-tools', 'ai-image-prompt', 'Create AI background and thumbnail prompt ideas for YouTube videos while leaving room for final text.', 1, 1],
+    ['Logo Prompt Generator', 'logo-prompt-generator', 'ai-prompt-tools', 'ai-image-prompt', 'Generate logo concept prompts for brands, channels, startups, apps, and creator projects.', 0, 1],
+    ['Character Prompt Generator', 'character-prompt-generator', 'ai-prompt-tools', 'ai-image-prompt', 'Create detailed character prompts with style, clothing, mood, background, and visual direction.', 0, 0],
+    ['Interior Design Prompt Generator', 'interior-design-prompt-generator', 'ai-prompt-tools', 'ai-image-prompt', 'Generate room, studio, office, and interior design prompts with lighting and decor direction.', 0, 0],
+    ['Social Media Post Prompt Generator', 'social-media-post-prompt-generator', 'ai-prompt-tools', 'ai-image-prompt', 'Create polished visual prompts for Instagram posts, Reels covers, ads, and campaign creatives.', 0, 1],
     ['Video Storage Calculator', 'video-storage-calculator', 'video-calculators', 'video-storage', 'Calculate video storage from duration, format, bitrate, audio, cameras, and margin.', 1, 1],
     ['Video File Size Calculator', 'video-file-size-calculator', 'video-calculators', 'video-storage', 'Estimate video file size for common creator recording and export formats.', 1, 1],
     ['Video Compression Ratio Calculator', 'video-compression-ratio-calculator', 'video-calculators', 'bitrate', 'Compare original and compressed video size to understand compression ratio.', 0, 0],
@@ -158,7 +169,11 @@ $tools = [
 
 foreach ($tools as $i => $tool) {
     $cat = q('SELECT id FROM categories WHERE slug = ?', [$tool[2]])->fetch();
-    $content = "# {$tool[0]}\n\n## What is this tool?\n{$tool[4]}\n\n## How to use\nEnter values, review the result, copy it, and use the recommendation for your creator workflow.\n\n## Note\nActual results can vary by camera, codec, scene complexity, platform processing, and export settings.";
+    if ($tool[2] === 'ai-prompt-tools') {
+        $content = "# {$tool[0]}\n\n## What is this tool?\n{$tool[4]}\n\n## How to use\nEnter your idea, choose an AI tool, select a style, theme, lighting, composition, and aspect ratio, then copy the generated prompt into ChatGPT, Gemini, Midjourney, SDXL, Leonardo AI, or Canva AI.\n\n## Example\nIdea: premium creator desk setup for an AI tools website. Style: cinematic realistic. Theme: dark futuristic. The tool turns this into a clear prompt with composition, lighting, quality details, and a negative prompt.\n\n## Best use cases\nUse it for YouTube thumbnails, AI art, product photos, channel branding, social posts, blog images, website hero images, character concepts, and creative direction.\n\n## Important note\nThis tool does not call an external AI service. It formats your input into a stronger prompt that you can paste into your preferred AI image generator.";
+    } else {
+        $content = "# {$tool[0]}\n\n## What is this tool?\n{$tool[4]}\n\n## How to use\nEnter values, review the result, copy it, and use the recommendation for your creator workflow.\n\n## Note\nActual results can vary by camera, codec, scene complexity, platform processing, and export settings.";
+    }
     upsert('tools', [
         'name' => $tool[0],
         'slug' => $tool[1],
@@ -175,12 +190,17 @@ foreach ($tools as $i => $tool) {
     ], 'slug');
 }
 
-$toolRows = q('SELECT id FROM tools ORDER BY sort_order ASC')->fetchAll();
+$toolRows = q('SELECT id, template_type FROM tools ORDER BY sort_order ASC')->fetchAll();
 foreach ($toolRows as $row) {
     $exists = q('SELECT COUNT(*) c FROM faqs WHERE tool_id = ?', [$row['id']])->fetch()['c'];
     if (!$exists) {
-        q('INSERT INTO faqs (tool_id, question, answer, sort_order) VALUES (?, ?, ?, ?)', [$row['id'], 'Is this tool free?', 'Yes. This tool is free and works in your browser.', 0]);
-        q('INSERT INTO faqs (tool_id, question, answer, sort_order) VALUES (?, ?, ?, ?)', [$row['id'], 'Are results exact?', 'Results are approximate and depend on real-world camera, codec, and platform behavior.', 1]);
+        if (in_array($row['template_type'], ['ai-image-prompt', 'image-to-prompt', 'prompt-improver'], true)) {
+            q('INSERT INTO faqs (tool_id, question, answer, sort_order) VALUES (?, ?, ?, ?)', [$row['id'], 'Does this tool generate images?', 'No. It generates a polished prompt that you can paste into ChatGPT, Gemini, Midjourney, SDXL, Leonardo AI, Canva AI, or another image generator.', 0]);
+            q('INSERT INTO faqs (tool_id, question, answer, sort_order) VALUES (?, ?, ?, ?)', [$row['id'], 'Can it analyze my uploaded image automatically?', 'The image upload is a local preview helper. Describe the image details in the form so the tool can format a better prompt without using an external AI backend.', 1]);
+        } else {
+            q('INSERT INTO faqs (tool_id, question, answer, sort_order) VALUES (?, ?, ?, ?)', [$row['id'], 'Is this tool free?', 'Yes. This tool is free and works in your browser.', 0]);
+            q('INSERT INTO faqs (tool_id, question, answer, sort_order) VALUES (?, ?, ?, ?)', [$row['id'], 'Are results exact?', 'Results are approximate and depend on real-world camera, codec, and platform behavior.', 1]);
+        }
     }
 }
 
@@ -210,10 +230,10 @@ foreach ($pages as $p) upsert('pages', ['title' => $p[0], 'slug' => $p[1], 'cont
 
 foreach ([
     'site_name' => 'CreatorTool.in',
-    'homeHeroTitle' => 'CreatorTool.in',
-    'homeHeroSubtitle' => 'Fast tools for YouTubers, editors, videographers, streamers, and content creators.',
-    'global_meta_description' => 'Free calculators and generators for YouTubers, editors, videographers, streamers, and content creators.',
-    'footer_text' => 'Free creator tools for YouTubers, editors, videographers, and streamers.',
+    'homeHeroTitle' => 'AI Prompt Generator for ChatGPT, Gemini and Creators',
+    'homeHeroSubtitle' => 'Create better prompts for AI images, thumbnails, product photos, logos, characters, social posts, and creator content.',
+    'global_meta_description' => 'Free AI prompt generators plus creator tools for images, thumbnails, YouTube, video editing, streaming, and social media.',
+    'footer_text' => 'AI prompt generators and free creator tools for YouTubers, editors, designers, streamers, and content creators.',
     'site_logo' => '',
     'site_favicon' => '',
     'footer_image' => '',
