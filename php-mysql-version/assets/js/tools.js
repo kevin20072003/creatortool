@@ -55,6 +55,18 @@ document.addEventListener("change", (event) => {
   runTool();
 });
 document.addEventListener("DOMContentLoaded", () => runTool());
+document.addEventListener("DOMContentLoaded", () => {
+  $$("[data-chat-toggle]").forEach((button) => button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    toggleAssistant();
+  }));
+  $$("[data-chat-send]").forEach((button) => button.addEventListener("click", (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    sendAssistantMessage();
+  }));
+});
 document.addEventListener("keydown", (event) => {
   if (event.key === "Enter" && event.target.matches("[data-chat-input]")) sendAssistantMessage();
 });
@@ -836,7 +848,13 @@ function loadExample() {
 }
 
 function toggleAssistant() {
-  $("[data-chat-panel]")?.classList.toggle("open");
+  const panel = $("[data-chat-panel]");
+  if (!panel) return;
+  const open = !panel.classList.contains("open");
+  panel.classList.toggle("open", open);
+  panel.style.display = open ? "grid" : "";
+  panel.setAttribute("aria-hidden", open ? "false" : "true");
+  if (open) setTimeout(() => $("[data-chat-input]")?.focus(), 50);
 }
 
 function sendAssistantMessage() {

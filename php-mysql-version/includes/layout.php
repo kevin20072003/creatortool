@@ -20,11 +20,11 @@ function render_header(string $title = '', string $description = ''): void {
   <meta property="og:description" content="<?= e($desc) ?>">
   <meta name="twitter:card" content="summary_large_image">
   <?php if ($favicon): ?><link rel="icon" href="<?= e($favicon) ?>"><?php endif; ?>
-  <link rel="stylesheet" href="/assets/css/style.css?v=20260624-tool-fix">
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260624-tool-fix2">
   <?php if (setting('search_console_code')): ?><?= setting('search_console_code') ?><?php endif; ?>
   <?php if (setting('google_analytics_code')): ?><?= setting('google_analytics_code') ?><?php endif; ?>
   <?php if (setting('custom_head_code')): ?><?= setting('custom_head_code') ?><?php endif; ?>
-  <script defer src="/assets/js/tools.js"></script>
+  <script defer src="/assets/js/tools.js?v=20260624-tool-fix2"></script>
 </head>
 <body>
   <header class="site-header">
