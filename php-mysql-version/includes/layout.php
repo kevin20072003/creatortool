@@ -20,7 +20,7 @@ function render_header(string $title = '', string $description = ''): void {
   <meta property="og:description" content="<?= e($desc) ?>">
   <meta name="twitter:card" content="summary_large_image">
   <?php if ($favicon): ?><link rel="icon" href="<?= e($favicon) ?>"><?php endif; ?>
-  <link rel="stylesheet" href="/assets/css/style.css?v=20260624-ai-prompts">
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260624-ai-platform">
   <?php if (setting('search_console_code')): ?><?= setting('search_console_code') ?><?php endif; ?>
   <?php if (setting('google_analytics_code')): ?><?= setting('google_analytics_code') ?><?php endif; ?>
   <?php if (setting('custom_head_code')): ?><?= setting('custom_head_code') ?><?php endif; ?>
@@ -32,6 +32,7 @@ function render_header(string $title = '', string $description = ''): void {
       <a class="brand" href="/"><?php if ($logo): ?><img src="<?= e($logo) ?>" alt="<?= e($siteName) ?>"><?php else: ?><span>CT</span><?php endif; ?><?= e($siteName) ?></a>
       <button class="menu-btn" type="button" data-menu>Menu</button>
       <nav class="nav-links" data-nav>
+        <a href="/categories/ai-prompt-tools">AI Prompt Tools</a>
         <a href="/tools">Tools</a>
         <a href="/blog">Blog</a>
         <a href="/pages/about">About</a>
@@ -48,6 +49,12 @@ function render_footer(): void {
     $siteName = setting('site_name', SITE_NAME);
     $logo = setting('site_logo', '');
     $footerImage = setting('footer_image', '');
+    $assistantTools = [];
+    try {
+        $assistantTools = q('SELECT t.name, t.slug, t.description, t.template_type, c.name category FROM tools t LEFT JOIN categories c ON c.id = t.category_id WHERE t.status = "published" ORDER BY t.featured DESC, t.popular DESC, t.sort_order, t.name LIMIT 120')->fetchAll();
+    } catch (Throwable $e) {
+        $assistantTools = [];
+    }
     ?>
   <footer class="footer">
     <div class="container footer-grid">
@@ -69,6 +76,37 @@ function render_footer(): void {
       <div><h3>Admin</h3><a href="/admin/login.php">Login</a><a href="/sitemap.php">Sitemap</a></div>
     </div>
   </footer>
+  <section class="assistant-widget" data-chat-widget>
+    <button class="assistant-toggle" type="button" data-chat-toggle><span>AI</span><strong>Find a tool</strong></button>
+    <div class="assistant-panel" data-chat-panel>
+      <div class="assistant-head">
+        <div><p class="eyebrow">CreatorTool assistant</p><h3>Tell me what you need</h3></div>
+        <button type="button" data-chat-toggle>Close</button>
+      </div>
+      <div class="assistant-messages" data-chat-messages>
+        <div class="assistant-message bot">Hi. Tell me your task, like "make image prompt", "calculate 4K storage", "YouTube tags", or "OBS bitrate". I will suggest the right tool.</div>
+      </div>
+      <div class="assistant-suggestions">
+        <button type="button" data-chat-suggestion="I need an AI image prompt">Image prompt</button>
+        <button type="button" data-chat-suggestion="Calculate video storage">Video storage</button>
+        <button type="button" data-chat-suggestion="YouTube thumbnail idea">Thumbnail</button>
+      </div>
+      <div class="assistant-input-row">
+        <input class="input" data-chat-input placeholder="Describe your need...">
+        <button class="btn-primary" type="button" data-chat-send>Send</button>
+      </div>
+    </div>
+  </section>
+  <script>
+    window.creatorToolsIndex = <?= json_encode(array_map(fn($tool) => [
+        'name' => $tool['name'],
+        'slug' => $tool['slug'],
+        'description' => $tool['description'],
+        'category' => $tool['category'],
+        'type' => $tool['template_type'],
+        'url' => tool_url($tool['slug']),
+    ], $assistantTools), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) ?>;
+  </script>
 </body>
 </html>
 <?php }

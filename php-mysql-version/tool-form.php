@@ -1,5 +1,6 @@
 <?php
 $template = $tool['template_type'] ?? 'video-storage';
+$slug = $tool['slug'] ?? '';
 
 function video_format_fields(bool $withCameras = true, bool $withDuration = true): void { ?>
   <?php if ($withDuration): ?>
@@ -16,7 +17,35 @@ function video_format_fields(bool $withCameras = true, bool $withDuration = true
 ?>
 
 <div class="tool-form-grid">
-<?php if (in_array($template, ['video-storage', 'video-file-size'], true)): ?>
+<?php if ($slug === 'video-compression-ratio-calculator'): ?>
+  <label class="label">Original file size<input class="input" name="original_size" value="20" inputmode="decimal"></label>
+  <label class="label">Original unit<select class="select" name="original_unit"><option>GB</option><option>MB</option><option>TB</option></select></label>
+  <label class="label">Compressed file size<input class="input" name="compressed_size" value="5" inputmode="decimal"></label>
+  <label class="label">Compressed unit<select class="select" name="compressed_unit"><option>GB</option><option>MB</option><option>TB</option></select></label>
+<?php elseif ($slug === 'frame-rate-converter'): ?>
+  <label class="label">Source frame rate<input class="input" name="source_fps" value="60" inputmode="decimal"></label>
+  <label class="label">Target frame rate<input class="input" name="target_fps" value="24" inputmode="decimal"></label>
+  <label class="label">Clip duration seconds<input class="input" name="clip_seconds" value="10" inputmode="decimal"></label>
+  <label class="label">Conversion mode<select class="select" name="conversion_mode"><option>Conform speed</option><option>Keep duration</option></select></label>
+<?php elseif ($slug === 'audio-delay-calculator'): ?>
+  <label class="label">Video frame rate<input class="input" name="source_fps" value="30" inputmode="decimal"></label>
+  <label class="label">Delay frames<input class="input" name="delay_frames" value="2" inputmode="decimal"></label>
+  <label class="label">Audio delay ms<input class="input" name="audio_delay_ms" value="0" inputmode="decimal"></label>
+<?php elseif (in_array($slug, ['audio-file-size-calculator', 'audio-bitrate-calculator', 'wav-storage-calculator', 'podcast-duration-calculator'], true)): ?>
+  <?php if ($slug === 'podcast-duration-calculator'): ?>
+    <label class="label">Storage size<input class="input" name="storage" value="2" inputmode="decimal"></label>
+    <label class="label">Storage unit<select class="select" name="storage_unit"><option>GB</option><option>MB</option><option>TB</option></select></label>
+  <?php else: ?>
+    <label class="label">Hours<input class="input" name="hours" value="1" inputmode="decimal"></label>
+    <label class="label">Minutes<input class="input" name="minutes" value="0" inputmode="decimal"></label>
+  <?php endif; ?>
+  <label class="label">Audio format<select class="select" name="audio_format"><option>AAC / MP3 bitrate</option><option>WAV 16-bit 48kHz stereo</option><option>WAV 24-bit 48kHz stereo</option><option>Podcast voice mono</option></select></label>
+  <label class="label">Bitrate Kbps<input class="input" name="audio" value="192" inputmode="decimal"></label>
+  <?php if ($slug === 'audio-bitrate-calculator'): ?>
+    <label class="label">Target file size<input class="input" name="target" value="100" inputmode="decimal"></label>
+    <label class="label">Unit<select class="select" name="unit"><option>MB</option><option>GB</option><option>TB</option></select></label>
+  <?php endif; ?>
+<?php elseif (in_array($template, ['video-storage', 'video-file-size'], true)): ?>
   <?php video_format_fields(true, true); ?>
   <label class="label">Safety margin %<input class="input" name="margin" value="20" inputmode="decimal"></label>
 <?php elseif ($template === 'bitrate'): ?>

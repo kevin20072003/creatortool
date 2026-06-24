@@ -47,7 +47,7 @@ render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $
   <h1><?= e($tool['name']) ?></h1>
   <p class="lead"><?= e($tool['description']) ?></p>
   <?php ad_slot('header'); ?>
-  <section class="tool-shell" data-tool="<?= e($tool['template_type']) ?>">
+  <section class="tool-shell" data-tool="<?= e($tool['template_type']) ?>" data-slug="<?= e($tool['slug']) ?>" data-name="<?= e($tool['name']) ?>">
     <div class="tool-grid">
       <div class="card">
         <?php include __DIR__ . '/tool-form.php'; ?>

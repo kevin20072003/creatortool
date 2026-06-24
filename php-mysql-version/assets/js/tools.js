@@ -36,10 +36,15 @@ const interlaceFactor = {
 };
 
 document.addEventListener("click", (event) => {
-  if (event.target.matches("[data-menu]")) $("[data-nav]")?.classList.toggle("open");
-  if (event.target.matches("[data-copy]")) navigator.clipboard?.writeText($("[data-result]")?.innerText || "");
-  if (event.target.matches("[data-reset]")) location.reload();
-  if (event.target.matches("[data-example]")) loadExample();
+  const target = event.target;
+  if (target.closest("[data-menu]")) $("[data-nav]")?.classList.toggle("open");
+  if (target.closest("[data-copy]")) copyResult(target.closest("[data-copy]"));
+  if (target.closest("[data-reset]")) location.reload();
+  if (target.closest("[data-example]")) loadExample();
+  if (target.closest("[data-chat-toggle]")) toggleAssistant();
+  if (target.closest("[data-chat-send]")) sendAssistantMessage();
+  const suggestion = target.closest("[data-chat-suggestion]");
+  if (suggestion) askAssistant(suggestion.dataset.chatSuggestion || suggestion.innerText);
 });
 
 document.addEventListener("input", () => runTool());
@@ -48,6 +53,9 @@ document.addEventListener("change", (event) => {
   runTool();
 });
 document.addEventListener("DOMContentLoaded", () => runTool());
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Enter" && event.target.matches("[data-chat-input]")) sendAssistantMessage();
+});
 
 function num(name) {
   return Number($(`[name="${name}"]`)?.value || 0);
@@ -55,6 +63,10 @@ function num(name) {
 
 function val(name) {
   return $(`[name="${name}"]`)?.value || "";
+}
+
+function toolSlug() {
+  return $("[data-tool]")?.dataset.slug || "";
 }
 
 function formatNumber(value, decimals = 2) {
@@ -120,6 +132,16 @@ function runTool() {
   const wrap = $("[data-tool]");
   if (!wrap) return;
   const type = wrap.dataset.tool;
+  const slug = wrap.dataset.slug || "";
+  const slugHandlers = {
+    "video-compression-ratio-calculator": compressionRatioOutput,
+    "frame-rate-converter": frameRateConverterOutput,
+    "audio-delay-calculator": audioDelayOutput,
+    "audio-file-size-calculator": audioFileSizeOutput,
+    "audio-bitrate-calculator": audioBitrateOutput,
+    "wav-storage-calculator": audioFileSizeOutput,
+    "podcast-duration-calculator": podcastDurationOutput,
+  };
   const handlers = {
     "video-storage": storageOutput,
     "video-file-size": storageOutput,
@@ -128,8 +150,8 @@ function runTool() {
     "streaming-bandwidth": streamingOutput,
     "aspect-ratio": aspectRatioOutput,
     "crop-factor": cropFactorOutput,
-    "generator": titleGeneratorOutput,
-    "description-generator": descriptionGeneratorOutput,
+    "generator": smartGeneratorOutput,
+    "description-generator": smartDescriptionOutput,
     "hashtag-generator": hashtagGeneratorOutput,
     "thumbnail-text-generator": thumbnailTextOutput,
     "srt-formatter": srtOutput,
@@ -140,8 +162,17 @@ function runTool() {
     "image-to-prompt": imageToPromptOutput,
     "prompt-improver": promptImproverOutput,
   };
-  const result = (handlers[type] || storageOutput)();
+  const result = (slugHandlers[slug] || handlers[type] || storageOutput)();
   writeResult(result.text, result.summary);
+}
+
+function copyResult(button) {
+  const text = $("[data-result]")?.innerText || "";
+  navigator.clipboard?.writeText(text);
+  if (!button) return;
+  const old = button.innerText;
+  button.innerText = "Copied";
+  setTimeout(() => { button.innerText = old; }, 1300);
 }
 
 function writeResult(text, summary = []) {
@@ -292,6 +323,30 @@ function titleGeneratorOutput() {
   return { text: `Title ideas:\n- ${ideas.join("\n- ")}`, summary: ["Titles", tone, `${ideas.length} ideas`, "generator"] };
 }
 
+function smartGeneratorOutput() {
+  const slug = toolSlug();
+  if (slug.includes("hook")) return hookGeneratorOutput();
+  if (slug.includes("bio")) return bioGeneratorOutput();
+  if (slug.includes("idea")) return ideaGeneratorOutput();
+  if (slug.includes("checklist")) return checklistOutput();
+  if (slug.includes("color-palette")) return paletteOutput();
+  if (slug.includes("keyword")) return keywordOutput();
+  if (slug.includes("faq-schema")) return faqIdeasOutput();
+  if (slug.includes("calendar")) return calendarOutput();
+  return titleGeneratorOutput();
+}
+
+function smartDescriptionOutput() {
+  const slug = toolSlug();
+  if (slug.includes("checklist")) return checklistOutput();
+  if (slug.includes("bio")) return bioGeneratorOutput();
+  if (slug.includes("brief")) return contentBriefOutput();
+  if (slug.includes("meta-description")) return metaDescriptionOutput();
+  if (slug.includes("title-checker")) return titleCheckerOutput();
+  if (slug.includes("audio-level")) return audioLevelNotesOutput();
+  return descriptionGeneratorOutput();
+}
+
 function descriptionGeneratorOutput() {
   const title = val("title") || val("keyword") || "New creator video";
   const topic = val("keyword") || "creator workflow";
@@ -321,6 +376,259 @@ function thumbnailTextOutput() {
   const topic = val("keyword") || "video storage";
   const ideas = [`STOP WASTING SPACE`, `${topic.toUpperCase()}?`, `DO THIS FIRST`, `SAVE HOURS`, `BIG MISTAKE`];
   return { text: `Thumbnail text ideas:\n- ${ideas.join("\n- ")}`, summary: ["Thumbnail", "Short text", `${ideas.length} ideas`, "generator"] };
+}
+
+function hookGeneratorOutput() {
+  const topic = val("keyword") || "AI creator tools";
+  const hooks = [
+    `Stop scrolling if you use ${topic}.`,
+    `I tested ${topic} so you do not waste time.`,
+    `Here is the fastest way to improve ${topic}.`,
+    `Most creators do ${topic} the hard way.`,
+    `This one ${topic} mistake costs views.`,
+    `Before you post, check this ${topic} tip.`,
+  ];
+  return { text: `Hook ideas:\n- ${hooks.join("\n- ")}`, summary: ["Hooks", `${hooks.length} ideas`, "Short form", "Ready"] };
+}
+
+function bioGeneratorOutput() {
+  const topic = val("keyword") || val("title") || "AI tools and creator workflows";
+  const niche = val("niche") || "creators";
+  const text = `Bio options:
+1. Helping ${niche} create better content with ${topic}. Tools, prompts, and simple workflows.
+2. ${topic} made simple for ${niche}. Follow for practical ideas, templates, and creator systems.
+3. Creator-focused tips for ${topic}. Clear tools, faster planning, better content.`;
+  return { text, summary: ["Bio", "3 options", "Profile-ready", "Generator"] };
+}
+
+function ideaGeneratorOutput() {
+  const topic = val("keyword") || "AI prompt tools";
+  const ideas = [
+    `Beginner guide to ${topic}`,
+    `Common mistakes people make with ${topic}`,
+    `Before and after using ${topic}`,
+    `${topic} workflow for busy creators`,
+    `Free tools that improve ${topic}`,
+    `How I would use ${topic} for a new channel`,
+  ];
+  return { text: `Content ideas:\n- ${ideas.join("\n- ")}`, summary: ["Ideas", `${ideas.length}`, "Creator content", "Ready"] };
+}
+
+function checklistOutput() {
+  const topic = val("keyword") || val("title") || "creator upload";
+  const text = `${topic} checklist:
+1. Clear title with the main keyword.
+2. Strong thumbnail or visual concept.
+3. Description explains the value in the first two lines.
+4. Add tags, hashtags, chapters, and related links.
+5. Check mobile readability.
+6. Add internal links to related tools or posts.
+7. Review before publishing.`;
+  return { text, summary: ["Checklist", "7 steps", "Publish-ready", "SEO"] };
+}
+
+function paletteOutput() {
+  const topic = val("keyword") || "AI creator thumbnail";
+  const text = `Color palette ideas for ${topic}:
+1. Electric cyan, deep navy, clean white, graphite.
+2. Lime accent, charcoal black, soft gray, warm yellow.
+3. Premium teal, midnight blue, silver, subtle magenta.
+
+Tip: use one bright accent for the subject and keep the background controlled.`;
+  return { text, summary: ["Palette", "3 options", "Thumbnail", "Design"] };
+}
+
+function keywordOutput() {
+  const topic = val("keyword") || "AI prompt generator";
+  const words = topic.toLowerCase().split(/[, ]+/).filter(Boolean);
+  const ideas = [
+    topic,
+    `${topic} free`,
+    `${topic} for creators`,
+    `${topic} for youtube`,
+    `${topic} online`,
+    `${words.join(" ")} tool`,
+    `${words.join(" ")} ideas`,
+  ];
+  return { text: `Keyword ideas:\n- ${[...new Set(ideas)].join("\n- ")}`, summary: ["Keywords", `${ideas.length}`, "SEO", "Ready"] };
+}
+
+function faqIdeasOutput() {
+  const topic = val("keyword") || "AI prompt generator";
+  const faqs = [
+    `What is ${topic}?`,
+    `How do I use ${topic}?`,
+    `Is ${topic} free?`,
+    `Can beginners use ${topic}?`,
+    `What are common mistakes with ${topic}?`,
+  ];
+  return { text: `FAQ ideas:\n- ${faqs.join("\n- ")}`, summary: ["FAQ", `${faqs.length}`, "Schema ideas", "SEO"] };
+}
+
+function calendarOutput() {
+  const topic = val("keyword") || "AI creator tools";
+  const text = `7-day content calendar for ${topic}:
+Day 1: Beginner tutorial
+Day 2: Common mistake post
+Day 3: Quick tip Reel/Short
+Day 4: Tool comparison
+Day 5: Behind-the-scenes workflow
+Day 6: FAQ post
+Day 7: Case study or before/after`;
+  return { text, summary: ["Calendar", "7 days", "Content plan", "Ready"] };
+}
+
+function contentBriefOutput() {
+  const topic = val("keyword") || val("title") || "AI prompt generator";
+  const text = `SEO content brief: ${topic}
+
+Search intent: user wants a practical tool, examples, and copy-ready output.
+Recommended sections:
+1. What the tool does
+2. How to use it
+3. Example output
+4. Best use cases
+5. Mistakes to avoid
+6. FAQ
+
+Primary keywords:
+- ${topic}
+- ${topic} online
+- free ${topic}
+
+Internal links:
+- Related prompt tools
+- Blog guides
+- Category page`;
+  return { text, summary: ["Brief", "SEO", "Sections", "Ready"] };
+}
+
+function metaDescriptionOutput() {
+  const topic = val("keyword") || val("title") || "AI prompt generator";
+  const text = `Meta description options:
+1. Use this free ${topic} to create clear, copy-ready prompts for creators, designers, YouTubers, and social media content.
+2. Generate better ${topic} ideas with style, theme, lighting, composition, and practical prompt structure.
+3. Free online ${topic} for fast creator workflows. No signup required.`;
+  return { text, summary: ["Meta", "3 options", "SEO", "Ready"] };
+}
+
+function titleCheckerOutput() {
+  const title = val("title") || val("keyword") || "Best AI Prompt Generator for Creators";
+  const length = title.length;
+  const hasNumber = /\d/.test(title);
+  const score = Math.min(100, 45 + (length >= 35 && length <= 70 ? 25 : 10) + (hasNumber ? 10 : 0) + (/\b(best|free|how|tool|generator|guide)\b/i.test(title) ? 20 : 8));
+  const text = `Title score: ${score}/100
+Length: ${length} characters
+Clarity: ${length >= 35 && length <= 70 ? "Good length for search and clickability." : "Try 35-70 characters for a stronger title."}
+Power words: ${hasNumber ? "Number detected." : "Add a number only if it is honest and useful."}
+Suggestion: Put the main keyword near the front and make the benefit obvious.`;
+  return { text, summary: ["Title", `${score}/100`, `${length} chars`, "SEO"] };
+}
+
+function audioLevelNotesOutput() {
+  const topic = val("keyword") || "voice recording";
+  const text = `Audio level notes for ${topic}:
+- Record voice peaks around -12 dB to -6 dB.
+- Keep average speech around -18 dB to -14 dB before final loudness processing.
+- Avoid clipping at 0 dB.
+- Use headphones to check noise, hum, echo, and plosives.
+- For web video, export AAC 192-320 kbps.`;
+  return { text, summary: ["Audio", "Level notes", "Recording", "Ready"] };
+}
+
+function unitToGB(value, unit) {
+  return value * (unit === "TB" ? 1024 : unit === "MB" ? 1 / 1024 : 1);
+}
+
+function compressionRatioOutput() {
+  const originalGB = unitToGB(num("original_size") || 1, val("original_unit"));
+  const compressedGB = unitToGB(num("compressed_size") || 1, val("compressed_unit"));
+  const ratio = originalGB / Math.max(0.0001, compressedGB);
+  const saved = Math.max(0, ((originalGB - compressedGB) / originalGB) * 100);
+  const text = `Compression ratio: ${formatNumber(ratio, 2)}:1
+Original size: ${formatNumber(originalGB)} GB
+Compressed size: ${formatNumber(compressedGB)} GB
+Space saved: ${formatNumber(saved, 1)}%
+
+Professional note: a higher ratio saves storage but may reduce quality. For client delivery, check motion, gradients, skin tones, and text sharpness after compression.`;
+  return { text, summary: [`${formatNumber(ratio, 2)}:1`, `${formatNumber(saved, 1)}% saved`, `${formatNumber(compressedGB)} GB`, "Compression"] };
+}
+
+function frameRateConverterOutput() {
+  const source = Math.max(1, num("source_fps") || 60);
+  const target = Math.max(1, num("target_fps") || 24);
+  const seconds = Math.max(1, num("clip_seconds") || 10);
+  const mode = val("conversion_mode") || "Conform speed";
+  const sourceFrames = source * seconds;
+  const targetDuration = mode === "Conform speed" ? sourceFrames / target : seconds;
+  const speed = mode === "Conform speed" ? (seconds / targetDuration) * 100 : 100;
+  const text = `Source frames: ${formatNumber(sourceFrames, 0)}
+Source frame rate: ${formatNumber(source, source % 1 ? 2 : 0)} fps
+Target frame rate: ${formatNumber(target, target % 1 ? 2 : 0)} fps
+Mode: ${mode}
+Output duration: ${formatNumber(targetDuration, 2)} seconds
+Speed change: ${formatNumber(speed, 1)}%
+
+Tip: use conform speed for slow motion. Use keep duration when you want normal playback and frame interpolation or frame dropping.`;
+  return { text, summary: [`${source} -> ${target}`, `${formatNumber(targetDuration, 2)}s`, `${formatNumber(speed, 1)}%`, "Frame rate"] };
+}
+
+function audioDelayOutput() {
+  const fps = Math.max(1, num("source_fps") || 30);
+  const frames = num("delay_frames") || 0;
+  const manualMs = num("audio_delay_ms") || 0;
+  const frameMs = (frames / fps) * 1000;
+  const total = frameMs + manualMs;
+  const text = `Delay from frames: ${formatNumber(frameMs, 1)} ms
+Manual audio delay: ${formatNumber(manualMs, 1)} ms
+Total delay correction: ${formatNumber(total, 1)} ms
+
+OBS / editor note: if audio is early, add positive delay to audio. If audio is late, reduce audio delay or delay the video layer.`;
+  return { text, summary: [`${formatNumber(total, 1)} ms`, `${frames} frames`, `${fps} fps`, "Sync"] };
+}
+
+function audioBitrateMbps() {
+  const format = val("audio_format");
+  if (format.includes("24-bit")) return 2.304;
+  if (format.includes("16-bit")) return 1.536;
+  if (format.includes("mono")) return Math.max(32, num("audio") || 96) / 1000;
+  return Math.max(32, num("audio") || 192) / 1000;
+}
+
+function audioFileSizeOutput() {
+  const mbps = audioBitrateMbps();
+  const seconds = durationSeconds();
+  const gb = sizeGB(mbps, seconds);
+  const text = `Estimated audio file size: ${formatNumber(gb * 1024)} MB / ${formatNumber(gb, 3)} GB
+Audio format: ${val("audio_format") || "AAC / MP3 bitrate"}
+Audio bitrate: ${formatNumber(mbps * 1000, 0)} Kbps
+Duration: ${formatNumber(seconds / 60, 1)} minutes
+
+Note: WAV is uncompressed and much larger than AAC/MP3. Final exported size can vary by encoder and metadata.`;
+  return { text, summary: [`${formatNumber(gb * 1024)} MB`, `${formatNumber(mbps * 1000, 0)} Kbps`, `${formatNumber(seconds / 60, 1)} min`, "Audio"] };
+}
+
+function audioBitrateOutput() {
+  const targetGB = unitToGB(num("target") || 100, val("unit"));
+  const kbps = (targetGB * 8 * 1024 * 1000) / durationSeconds();
+  const text = `Required audio bitrate: ${formatNumber(kbps, 0)} Kbps
+Target size: ${formatNumber(targetGB * 1024)} MB
+Duration: ${formatNumber(durationSeconds() / 60, 1)} minutes
+
+Recommendation: voice-only podcasts often work well at 96-128 Kbps. Music or stereo content usually needs 192-320 Kbps.`;
+  return { text, summary: [`${formatNumber(kbps, 0)} Kbps`, `${formatNumber(targetGB * 1024)} MB`, "Audio", "Bitrate"] };
+}
+
+function podcastDurationOutput() {
+  const storageGB = unitToGB(num("storage") || 1, val("storage_unit"));
+  const mbps = audioBitrateMbps();
+  const minutes = (storageGB * 8 * 1024) / mbps / 60;
+  const text = `Estimated podcast recording duration: ${formatNumber(minutes, 1)} minutes / ${formatNumber(minutes / 60, 2)} hours
+Storage available: ${formatNumber(storageGB * 1024)} MB
+Audio bitrate: ${formatNumber(mbps * 1000, 0)} Kbps
+
+Tip: keep extra space for edits, backups, project files, and exported versions.`;
+  return { text, summary: [`${formatNumber(minutes / 60, 2)} hr`, `${formatNumber(storageGB)} GB`, `${formatNumber(mbps * 1000, 0)} Kbps`, "Podcast"] };
 }
 
 function srtOutput() {
@@ -507,4 +815,74 @@ function loadExample() {
   const keyword = $('[name="keyword"]');
   if (keyword) keyword.value = "cinematic travel vlog";
   runTool();
+}
+
+function toggleAssistant() {
+  $("[data-chat-panel]")?.classList.toggle("open");
+}
+
+function sendAssistantMessage() {
+  const input = $("[data-chat-input]");
+  const message = (input?.value || "").trim();
+  if (!message) return;
+  if (input) input.value = "";
+  askAssistant(message);
+}
+
+function askAssistant(message) {
+  addAssistantMessage(message, "user");
+  const matches = findMatchingTools(message);
+  if (!matches.length) {
+    addAssistantMessage("I could not find an exact tool for that yet. Try words like prompt, image, YouTube, thumbnail, storage, bitrate, subtitle, audio, OBS, hashtag, bio, or upload time. You can also create a new tool from the admin panel.", "bot");
+    return;
+  }
+  const links = matches.map((tool) => `<a href="${tool.url}"><strong>${escapeHtml(tool.name)}</strong><span>${escapeHtml(tool.category || "Tool")} - ${escapeHtml(tool.description || "")}</span></a>`).join("");
+  addAssistantMessage(`Best tools for this:\n${links}`, "bot", true);
+}
+
+function findMatchingTools(query) {
+  const tools = window.creatorToolsIndex || [];
+  const normalized = query.toLowerCase();
+  const intentBoosts = [
+    [["prompt", "image", "gemini", "chatgpt", "midjourney", "ai art"], "prompt"],
+    [["storage", "file size", "4k", "sd card", "recording"], "storage"],
+    [["bitrate", "obs", "stream", "twitch", "live"], "stream"],
+    [["thumbnail", "title", "description", "youtube", "tags", "hashtag"], "youtube"],
+    [["subtitle", "caption", "srt"], "subtitle"],
+    [["audio", "podcast", "wav", "delay", "sync"], "audio"],
+    [["logo", "product", "character", "social", "instagram", "reel"], "creative"],
+  ];
+  return tools
+    .map((tool) => {
+      const haystack = `${tool.name} ${tool.description} ${tool.category} ${tool.type}`.toLowerCase();
+      let score = 0;
+      for (const word of normalized.split(/[^a-z0-9]+/).filter((part) => part.length > 2)) {
+        if (haystack.includes(word)) score += word.length;
+      }
+      for (const [words, intent] of intentBoosts) {
+        if (words.some((word) => normalized.includes(word))) {
+          if (haystack.includes(intent) || words.some((word) => haystack.includes(word))) score += 18;
+        }
+      }
+      if (tool.category?.toLowerCase().includes("ai prompt") && /prompt|image|gemini|chatgpt|midjourney|logo|product|character|thumbnail/.test(normalized)) score += 16;
+      return { ...tool, score };
+    })
+    .filter((tool) => tool.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5);
+}
+
+function addAssistantMessage(message, who, html = false) {
+  const box = $("[data-chat-messages]");
+  if (!box) return;
+  const div = document.createElement("div");
+  div.className = `assistant-message ${who}`;
+  if (html) div.innerHTML = message;
+  else div.innerText = message;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]));
 }
