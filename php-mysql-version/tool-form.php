@@ -2,6 +2,10 @@
 $template = $tool['template_type'] ?? 'video-storage';
 $slug = $tool['slug'] ?? '';
 
+function slug_has(string $slug, string $needle): bool {
+  return strpos($slug, $needle) !== false;
+}
+
 function video_format_fields(bool $withCameras = true, bool $withDuration = true): void { ?>
   <?php if ($withDuration): ?>
     <label class="label">Hours<input class="input" name="hours" value="1" inputmode="decimal"></label>
@@ -73,9 +77,27 @@ function video_format_fields(bool $withCameras = true, bool $withDuration = true
   <label class="label">Crop factor<select class="select" name="custom_rate"><option value="1">Full Frame 1.0x</option><option value="1.5" selected>APS-C Sony/Nikon 1.5x</option><option value="1.6">APS-C Canon 1.6x</option><option value="2">Micro Four Thirds 2.0x</option></select></label>
   <label class="label">Aperture<input class="input" name="target" value="2.8" inputmode="decimal"></label>
 <?php elseif ($template === 'description-generator'): ?>
-  <label class="label">Video title<input class="input" name="title" value="How to Calculate Video File Size"></label>
-  <label class="label">Topic<input class="input" name="keyword" value="4K video storage"></label>
-  <label class="label">Links / CTA<input class="input" name="links" value="Subscribe for more creator tips"></label>
+  <?php if (slug_has($slug, 'meta-description')): ?>
+    <label class="label">Page / tool topic<input class="input" name="title" value="AI Image Prompt Generator"></label>
+    <label class="label">Main keyword<input class="input" name="keyword" value="free AI prompt generator"></label>
+    <label class="label">Audience / benefit<input class="input" name="links" value="for creators, designers, and YouTubers"></label>
+  <?php elseif (slug_has($slug, 'checklist')): ?>
+    <label class="label">Checklist topic<input class="input" name="title" value="YouTube video upload"></label>
+    <label class="label">Platform / workflow<input class="input" name="keyword" value="YouTube SEO"></label>
+    <label class="label">Extra reminder<input class="input" name="links" value="Check title, thumbnail, tags, and description"></label>
+  <?php elseif (slug_has($slug, 'brief')): ?>
+    <label class="label">Content topic<input class="input" name="title" value="AI prompt generator guide"></label>
+    <label class="label">Primary keyword<input class="input" name="keyword" value="AI prompt generator"></label>
+    <label class="label">Target audience<input class="input" name="links" value="content creators and designers"></label>
+  <?php elseif (slug_has($slug, 'bio')): ?>
+    <label class="label">Profile topic<input class="input" name="title" value="AI tools for creators"></label>
+    <label class="label">Niche / audience<input class="input" name="keyword" value="YouTubers and designers"></label>
+    <label class="label">Call to action<input class="input" name="links" value="Follow for tools, prompts, and creator workflows"></label>
+  <?php else: ?>
+    <label class="label">Video / page title<input class="input" name="title" value="How to Calculate Video File Size"></label>
+    <label class="label">Topic<input class="input" name="keyword" value="4K video storage"></label>
+    <label class="label">Links / CTA<input class="input" name="links" value="Subscribe for more creator tips"></label>
+  <?php endif; ?>
 <?php elseif ($template === 'hashtag-generator'): ?>
   <label class="label">Keywords<input class="input" name="keyword" value="youtube creator tools"></label>
 <?php elseif ($template === 'thumbnail-text-generator'): ?>
@@ -112,8 +134,22 @@ This is the next subtitle line.</textarea></label>
   <label class="label">Aspect ratio<select class="select" name="prompt_ratio"><option>16:9 YouTube / landscape</option><option>9:16 Shorts / Reels</option><option>1:1 square</option><option>4:5 Instagram portrait</option><option>3:2 photo</option><option>21:9 cinematic</option></select></label>
   <label class="label wide">Negative prompt / avoid<textarea class="textarea" name="negative_prompt">blurry, low quality, distorted hands, extra fingers, bad text, watermark, logo, oversaturated, messy background</textarea></label>
 <?php else: ?>
-  <label class="label">Keyword / topic<input class="input" name="keyword" value="4K video storage"></label>
-  <label class="label">Niche / platform<input class="input" name="niche" value="YouTube creators"></label>
-  <label class="label">Tone<select class="select" name="tone"><option>Helpful</option><option>Bold</option><option>Curious</option><option>Professional</option></select></label>
+  <?php if (slug_has($slug, 'hook')): ?>
+    <label class="label">Video / Reel topic<input class="input" name="keyword" value="AI prompt tools"></label>
+    <label class="label">Platform<input class="input" name="niche" value="YouTube Shorts / Instagram Reels"></label>
+    <label class="label">Hook style<select class="select" name="tone"><option>Bold</option><option>Curious</option><option>Helpful</option><option>Professional</option></select></label>
+  <?php elseif (slug_has($slug, 'idea') || slug_has($slug, 'calendar')): ?>
+    <label class="label">Content niche<input class="input" name="keyword" value="AI tools for creators"></label>
+    <label class="label">Audience / platform<input class="input" name="niche" value="YouTube creators"></label>
+    <label class="label">Idea style<select class="select" name="tone"><option>Helpful</option><option>Bold</option><option>Curious</option><option>Professional</option></select></label>
+  <?php elseif (slug_has($slug, 'keyword') || slug_has($slug, 'faq-schema')): ?>
+    <label class="label">Main topic<input class="input" name="keyword" value="AI prompt generator"></label>
+    <label class="label">Target search audience<input class="input" name="niche" value="creators and designers"></label>
+    <label class="label">Search intent<select class="select" name="tone"><option>Helpful</option><option>Professional</option><option>Curious</option><option>Bold</option></select></label>
+  <?php else: ?>
+    <label class="label">Keyword / topic<input class="input" name="keyword" value="4K video storage"></label>
+    <label class="label">Niche / platform<input class="input" name="niche" value="YouTube creators"></label>
+    <label class="label">Tone<select class="select" name="tone"><option>Helpful</option><option>Bold</option><option>Curious</option><option>Professional</option></select></label>
+  <?php endif; ?>
 <?php endif; ?>
 </div>

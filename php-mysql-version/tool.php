@@ -51,11 +51,12 @@ render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $
     <div class="tool-grid">
       <div class="card">
         <?php include __DIR__ . '/tool-form.php'; ?>
+        <noscript><div class="alert">JavaScript is required for this tool to generate answers. Please enable JavaScript in your browser.</div></noscript>
         <p class="actions">
-          <button class="btn-primary" type="button" onclick="runTool()"><?= $isPromptTool ? 'Generate prompt' : 'Calculate' ?></button>
-          <button class="btn-secondary" data-example type="button">Example</button>
-          <button class="btn-secondary" data-copy type="button">Copy result</button>
-          <button class="btn-secondary" data-reset type="button">Reset</button>
+          <button class="btn-primary" type="button" onclick="calculateAndShow(); return false;"><?= $isPromptTool ? 'Generate prompt' : 'Calculate' ?></button>
+          <button class="btn-secondary" data-example type="button" onclick="exampleAndShow(); return false;">Example</button>
+          <button class="btn-secondary" data-copy type="button" onclick="copyResult(this); return false;">Copy result</button>
+          <button class="btn-secondary" data-reset type="button" onclick="resetTool(); return false;">Reset</button>
         </p>
         <div class="grid-auto">
           <div class="result-box"><p><?= $isPromptTool ? 'AI Tool' : 'Format' ?></p><strong data-summary></strong></div>
@@ -66,8 +67,8 @@ render_header($tool['seo_title'] ?: $tool['name'], $tool['seo_description'] ?: $
         <?php ad_slot('after-tool'); ?>
       </div>
       <aside class="card result-panel">
-        <p class="eyebrow">Result summary</p>
-        <pre data-result class="muted"></pre>
+        <p class="eyebrow">Answer output</p>
+        <pre data-result class="muted">Loading answer...</pre>
         <?php ad_slot('sidebar'); ?>
       </aside>
     </div>

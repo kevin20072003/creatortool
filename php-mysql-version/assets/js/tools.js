@@ -36,7 +36,9 @@ const interlaceFactor = {
 };
 
 document.addEventListener("click", (event) => {
+  if (event.defaultPrevented) return;
   const target = event.target;
+  if (target.closest("[onclick]")) return;
   if (target.closest("[data-menu]")) $("[data-nav]")?.classList.toggle("open");
   if (target.closest("[data-copy]")) copyResult(target.closest("[data-copy]"));
   if (target.closest("[data-reset]")) location.reload();
@@ -164,6 +166,22 @@ function runTool() {
   };
   const result = (slugHandlers[slug] || handlers[type] || storageOutput)();
   writeResult(result.text, result.summary);
+}
+
+function calculateAndShow() {
+  runTool();
+  const result = $("[data-result]");
+  result?.classList.add("has-answer");
+  result?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+function exampleAndShow() {
+  loadExample();
+  calculateAndShow();
+}
+
+function resetTool() {
+  location.reload();
 }
 
 function copyResult(button) {

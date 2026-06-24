@@ -20,7 +20,7 @@ function render_header(string $title = '', string $description = ''): void {
   <meta property="og:description" content="<?= e($desc) ?>">
   <meta name="twitter:card" content="summary_large_image">
   <?php if ($favicon): ?><link rel="icon" href="<?= e($favicon) ?>"><?php endif; ?>
-  <link rel="stylesheet" href="/assets/css/style.css?v=20260624-ai-platform">
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260624-tool-fix">
   <?php if (setting('search_console_code')): ?><?= setting('search_console_code') ?><?php endif; ?>
   <?php if (setting('google_analytics_code')): ?><?= setting('google_analytics_code') ?><?php endif; ?>
   <?php if (setting('custom_head_code')): ?><?= setting('custom_head_code') ?><?php endif; ?>
@@ -30,7 +30,7 @@ function render_header(string $title = '', string $description = ''): void {
   <header class="site-header">
     <div class="container nav">
       <a class="brand" href="/"><?php if ($logo): ?><img src="<?= e($logo) ?>" alt="<?= e($siteName) ?>"><?php else: ?><span>CT</span><?php endif; ?><?= e($siteName) ?></a>
-      <button class="menu-btn" type="button" data-menu>Menu</button>
+      <button class="menu-btn" type="button" data-menu onclick="document.querySelector('[data-nav]')?.classList.toggle('open'); return false;">Menu</button>
       <nav class="nav-links" data-nav>
         <a href="/categories/ai-prompt-tools">AI Prompt Tools</a>
         <a href="/tools">Tools</a>
@@ -77,23 +77,23 @@ function render_footer(): void {
     </div>
   </footer>
   <section class="assistant-widget" data-chat-widget>
-    <button class="assistant-toggle" type="button" data-chat-toggle><span>AI</span><strong>Find a tool</strong></button>
+    <button class="assistant-toggle" type="button" data-chat-toggle onclick="toggleAssistant(); return false;"><span>AI</span><strong>Find a tool</strong></button>
     <div class="assistant-panel" data-chat-panel>
       <div class="assistant-head">
         <div><p class="eyebrow">CreatorTool assistant</p><h3>Tell me what you need</h3></div>
-        <button type="button" data-chat-toggle>Close</button>
+        <button type="button" data-chat-toggle onclick="toggleAssistant(); return false;">Close</button>
       </div>
       <div class="assistant-messages" data-chat-messages>
         <div class="assistant-message bot">Hi. Tell me your task, like "make image prompt", "calculate 4K storage", "YouTube tags", or "OBS bitrate". I will suggest the right tool.</div>
       </div>
       <div class="assistant-suggestions">
-        <button type="button" data-chat-suggestion="I need an AI image prompt">Image prompt</button>
-        <button type="button" data-chat-suggestion="Calculate video storage">Video storage</button>
-        <button type="button" data-chat-suggestion="YouTube thumbnail idea">Thumbnail</button>
+        <button type="button" data-chat-suggestion="I need an AI image prompt" onclick="askAssistant('I need an AI image prompt'); return false;">Image prompt</button>
+        <button type="button" data-chat-suggestion="Calculate video storage" onclick="askAssistant('Calculate video storage'); return false;">Video storage</button>
+        <button type="button" data-chat-suggestion="YouTube thumbnail idea" onclick="askAssistant('YouTube thumbnail idea'); return false;">Thumbnail</button>
       </div>
       <div class="assistant-input-row">
         <input class="input" data-chat-input placeholder="Describe your need...">
-        <button class="btn-primary" type="button" data-chat-send>Send</button>
+        <button class="btn-primary" type="button" data-chat-send onclick="sendAssistantMessage(); return false;">Send</button>
       </div>
     </div>
   </section>
