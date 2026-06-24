@@ -57,11 +57,13 @@ document.addEventListener("change", (event) => {
 document.addEventListener("DOMContentLoaded", () => runTool());
 document.addEventListener("DOMContentLoaded", () => {
   $$("[data-chat-toggle]").forEach((button) => button.addEventListener("click", (event) => {
+    if (button.getAttribute("onclick")) return;
     event.preventDefault();
     event.stopPropagation();
     toggleAssistant();
   }));
   $$("[data-chat-send]").forEach((button) => button.addEventListener("click", (event) => {
+    if (button.getAttribute("onclick")) return;
     event.preventDefault();
     event.stopPropagation();
     sendAssistantMessage();
